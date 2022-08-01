@@ -1,1 +1,2 @@
-# web-kiosk-kwonhyukjin
+# 키오스크 가보자고 ~ 
+> 우아한테크캠프, 권혁진
