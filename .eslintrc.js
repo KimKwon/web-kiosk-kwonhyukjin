@@ -28,7 +28,6 @@ module.exports = {
     'eol-last': ['error', 'always'],
     'react-hooks/exhaustive-deps': 'warn',
     'react/no-array-index-key': 'error',
-
     'react/jsx-filename-extension': ['warn', { extensions: ['.tsx'] }],
     'import/extensions': [
       'error',
