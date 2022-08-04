@@ -25,18 +25,18 @@ export class Sales {
   @Column('decimal', {
     name: 'total_amount',
     nullable: true,
-    precision: 10,
+    precision: 8,
     scale: 0,
   })
-  totalAmount: string | null;
+  totalAmount: number | null;
 
   @Column('decimal', {
     name: 'given_price',
     nullable: true,
-    precision: 10,
+    precision: 8,
     scale: 0,
   })
-  givenPrice: string | null;
+  givenPrice: number | null;
 
   @ManyToOne(() => PaymentMethod, (paymentMethod) => paymentMethod.sales, {
     onDelete: 'NO ACTION',
