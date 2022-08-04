@@ -1,9 +1,9 @@
 ---
 name: TASK 단위 ISSUE 발행
 about: 1 task per 1 issue
-title: '[TASK Type] TASK Desc'
-labels: ''
-assignees: 'KimKwon'
+title: "[TASK Type] TASK Desc"
+labels: ""
+assignees: "KimKwon"
 ---
 
 ## 💼 TASK 개요 <!-- 개발할 기능에 대한 간단한 설명 작성 -->
