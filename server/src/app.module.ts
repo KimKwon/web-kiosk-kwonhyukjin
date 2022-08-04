@@ -1,30 +1,41 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { PaymentModule } from './payment/payment.module';
 import { MenuModule } from './menu/menu.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './entities/Category';
 import { Item } from './entities/Item';
+import { Size } from './entities/Size';
 import { PaymentMethod } from './entities/PaymentMethod';
 import { Sales } from './entities/Sales';
 import { SalesDetail } from './entities/SalesDetail';
-import { Size } from './entities/Size';
+
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: isDevelopment ? '.env.development' : '.env.production',
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (c: ConfigService) => ({
+        type: 'mysql',
+        host: c.get('HOST'),
+        username: c.get('USERNAME'),
+        password: c.get('PASSWORD'),
+        port: c.get('PORT'),
+        database: c.get('DATABASE_NAME'),
+        synchronize: isDevelopment,
+        entities: [Category, Item, Size, PaymentMethod, Sales, SalesDetail],
+        autoLoadEntities: true,
+      }),
+    }),
     PaymentModule,
     MenuModule,
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      database: 'kioskdb',
-      port: 3306,
-      username: 'root',
-      password: 'test',
-      entities: [Category, Item, PaymentMethod, Sales, SalesDetail, Size],
-      synchronize: process.env.NODE_ENV === 'development',
-      autoLoadEntities: true,
-    }),
   ],
   controllers: [AppController],
   providers: [],
