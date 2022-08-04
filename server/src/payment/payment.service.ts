@@ -73,6 +73,6 @@ export class PaymentService {
       ),
     );
 
-    return createdSales.id;
+    return { salesId: createdSales.id };
   }
 }
