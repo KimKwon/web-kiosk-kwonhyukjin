@@ -29,11 +29,11 @@ export class Item {
   thumbnail: string | null;
 
   @Column('varchar', {
-    name: 'specific_tempature_only',
+    name: 'specific_temperature_only',
     nullable: true,
     length: 45,
   })
-  specificTempatureOnly: string | null;
+  specificTemperatureOnly: string | null;
 
   @Column('varchar', { name: 'description', nullable: true, length: 45 })
   description: string | null;
