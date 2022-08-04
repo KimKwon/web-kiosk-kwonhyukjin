@@ -38,7 +38,7 @@ export class Item {
   @Column('varchar', { name: 'description', nullable: true, length: 45 })
   description: string | null;
 
-  @Column('int', { name: 'category_id' })
+  @Column('int', { name: 'category_id', select: false })
   categoryId: number;
 
   @ManyToOne(() => Category, (category) => category.items, {
