@@ -5,12 +5,12 @@ import { MenuService } from './menu.service';
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
   @Get()
-  findAll() {
+  getAllMenu() {
     return this.menuService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.menuService.findOne(+id);
+  getMenuDetail(@Param('id') id: number) {
+    return this.menuService.findOne(id);
   }
 }
