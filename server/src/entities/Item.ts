@@ -22,8 +22,8 @@ export class Item {
   @Column('varchar', { name: 'name', nullable: true, length: 45 })
   name: string | null;
 
-  @Column('decimal', { name: 'price', nullable: true, precision: 10, scale: 0 })
-  price: string | null;
+  @Column('decimal', { name: 'price', nullable: true, precision: 8, scale: 0 })
+  price: number | null;
 
   @Column('varchar', { name: 'thumbnail', nullable: true, length: 45 })
   thumbnail: string | null;
