@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaymentMethod } from 'src/entities/PaymentMethod';
 import { Sales } from 'src/entities/Sales';
@@ -73,5 +73,46 @@ export class SalesService {
     );
 
     return { salesId: createdSales.id };
+  }
+
+  async getDetailOfSales(salesId: number) {
+    return await this.salesDetailRepository
+      .createQueryBuilder('sb')
+      .select([
+        'item.name as itemName',
+        'item.price as itemPrice',
+        'size.name as sizeName',
+        'size.surcharge as surcharge',
+        'sb.isIce as isIce',
+        'sb.amount as amount',
+      ])
+      .leftJoin('sb.size', 'size')
+      .leftJoin('sb.item', 'item')
+      .whereInIds({ salesId })
+      .execute();
+  }
+
+  async findOneSales(salesId: number) {
+    const targetSales = await this.salesRepository
+      .createQueryBuilder('sales')
+      .select([
+        'sales.id as id',
+        'sales.createdAt as createdAt',
+        'sales.totalAmount as totalAmount',
+        'sales.givenPrice as givenPrice',
+        'paymentMethod.name as paymentMethodName',
+      ])
+      .leftJoin('sales.paymentMethod', 'paymentMethod')
+      .where({ id: salesId })
+      .execute();
+
+    if (targetSales.length === 0)
+      throw new HttpException('Sales NOT FOUND', 404);
+
+    const targetDetails = await this.getDetailOfSales(salesId);
+    if (targetDetails.length === 0)
+      throw new HttpException('Invalid Sales', 409);
+
+    return { ...targetSales[0], itemList: targetDetails };
   }
 }
