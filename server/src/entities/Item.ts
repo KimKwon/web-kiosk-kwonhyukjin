@@ -1,7 +1,6 @@
 import {
   Column,
   Entity,
-  Index,
   JoinColumn,
   JoinTable,
   ManyToMany,
@@ -13,7 +12,6 @@ import { Category } from './Category';
 import { Size } from './Size';
 import { SalesDetail } from './SalesDetail';
 
-@Index('fk_item_category1_idx', ['categoryId'], {})
 @Entity('item', { schema: 'kioskdb' })
 export class Item {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })

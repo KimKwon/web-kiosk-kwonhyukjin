@@ -1,7 +1,7 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
-  Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
@@ -10,14 +10,13 @@ import {
 import { PaymentMethod } from './PaymentMethod';
 import { SalesDetail } from './SalesDetail';
 
-@Index('fk_sales_payment_method1_idx', ['paymentMethodId'], {})
 @Entity('sales', { schema: 'kioskdb' })
 export class Sales {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Column('varchar', { name: 'created_at', nullable: true, length: 45 })
-  createdAt: string | null;
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Column('int', { name: 'payment_method_id' })
   paymentMethodId: number;
