@@ -6,6 +6,7 @@ import { SalesDetail } from 'src/entities/SalesDetail';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateEmptySalesDto, CreateSalesDto } from './dto/sales.dto';
 import { CreateSalesDetailDto } from './dto/salesDeatil.dto';
+import { getParsedDateStringWithHypen } from 'src/utils/date';
 
 @Injectable()
 export class SalesService {
@@ -109,6 +110,12 @@ export class SalesService {
   }
 
   async findOneSales(salesId: number, salesQb: SelectQueryBuilder<Sales>) {
+    const orderNumber = await salesQb
+      .where('DATE(sales.createdAt) = :createdAt', {
+        createdAt: getParsedDateStringWithHypen(new Date()),
+      })
+      .getCount();
+
     const targetSales = await salesQb.where({ id: salesId }).execute();
 
     if (targetSales.length === 0)
@@ -118,7 +125,7 @@ export class SalesService {
     if (targetDetails.length === 0)
       throw new HttpException('Invalid Sales', 409);
 
-    return { ...targetSales[0], itemList: targetDetails };
+    return { orderNumber: orderNumber + 1, ...targetSales[0], itemList: targetDetails };
   }
 
   async findAllSales(salesQb: SelectQueryBuilder<Sales>) {
