@@ -19,7 +19,7 @@ export class Size {
     precision: 10,
     scale: 0,
   })
-  surcharge: string | null;
+  surcharge: number | null;
 
   @Column('varchar', { name: 'name', nullable: true, length: 45 })
   name: string | null;

@@ -33,6 +33,9 @@ const isDevelopment = process.env.NODE_ENV === 'development';
         entities: [Category, Item, Size, PaymentMethod, Sales, SalesDetail],
         autoLoadEntities: true,
         logging: true,
+        extra: {
+          decimalNumbers: true,
+        },
       }),
     }),
     MenuModule,
