@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PaymentMethod } from 'src/entities/PaymentMethod';
 import { Sales } from 'src/entities/Sales';
 import { SalesDetail } from 'src/entities/SalesDetail';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateEmptySalesDto, CreateSalesDto } from './dto/sales.dto';
 import { CreateSalesDetailDto } from './dto/salesDeatil.dto';
 
@@ -92,8 +92,8 @@ export class SalesService {
       .execute();
   }
 
-  async findOneSales(salesId: number) {
-    const targetSales = await this.salesRepository
+  async findSales(salesId?: number) {
+    const salesQb = this.salesRepository
       .createQueryBuilder('sales')
       .select([
         'sales.id as id',
@@ -102,9 +102,14 @@ export class SalesService {
         'sales.givenPrice as givenPrice',
         'paymentMethod.name as paymentMethodName',
       ])
-      .leftJoin('sales.paymentMethod', 'paymentMethod')
-      .where({ id: salesId })
-      .execute();
+      .leftJoin('sales.paymentMethod', 'paymentMethod');
+
+    if (salesId) return this.findOneSales(salesId, salesQb);
+    return this.findAllSales(salesQb);
+  }
+
+  async findOneSales(salesId: number, salesQb: SelectQueryBuilder<Sales>) {
+    const targetSales = await salesQb.where({ id: salesId }).execute();
 
     if (targetSales.length === 0)
       throw new HttpException('Sales NOT FOUND', 404);
@@ -114,5 +119,9 @@ export class SalesService {
       throw new HttpException('Invalid Sales', 409);
 
     return { ...targetSales[0], itemList: targetDetails };
+  }
+
+  async findAllSales(salesQb: SelectQueryBuilder<Sales>) {
+    return await salesQb.execute();
   }
 }

@@ -11,8 +11,13 @@ export class SalesController {
     return this.salesService.create(initialSales);
   }
 
+  @Get()
+  findAllSales() {
+    return this.salesService.findSales();
+  }
+
   @Get(':id')
   findOneSales(@Param('id') id: number) {
-    return this.salesService.findOneSales(id);
+    return this.salesService.findSales(id);
   }
 }
