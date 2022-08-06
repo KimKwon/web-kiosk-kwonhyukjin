@@ -4,12 +4,11 @@ import { PaymentMethod } from 'src/entities/PaymentMethod';
 import { Sales } from 'src/entities/Sales';
 import { SalesDetail } from 'src/entities/SalesDetail';
 import { Repository } from 'typeorm';
-import { CreatePaymentDto } from './dto/payment.dto';
-import { CreateSalesDto } from './dto/sales.dto';
+import { CreateEmptySalesDto, CreateSalesDto } from './dto/sales.dto';
 import { CreateSalesDetailDto } from './dto/salesDeatil.dto';
 
 @Injectable()
-export class PaymentService {
+export class SalesService {
   constructor(
     @InjectRepository(Sales)
     private salesRepository: Repository<Sales>,
@@ -21,8 +20,8 @@ export class PaymentService {
     private paymentMethodRepository: Repository<PaymentMethod>,
   ) {}
 
-  private createSales(createSalesDto: CreateSalesDto) {
-    return this.salesRepository.create(createSalesDto);
+  private createSales(createEmptySalesDto: CreateEmptySalesDto) {
+    return this.salesRepository.create(createEmptySalesDto);
   }
 
   private createSalesDetail(createSalesDetailDto: CreateSalesDetailDto) {
@@ -37,8 +36,8 @@ export class PaymentService {
     return targetMethod.id;
   }
 
-  async create(createPaymentDto: CreatePaymentDto) {
-    const { paymentMethod, givenPrice, itemList } = createPaymentDto;
+  async create(createSalesDto: CreateSalesDto) {
+    const { paymentMethod, givenPrice, itemList } = createSalesDto;
 
     const paymentMethodId = await this.findPaymentMethodId(paymentMethod);
 

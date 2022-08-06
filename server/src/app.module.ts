@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { PaymentModule } from './payment/payment.module';
 import { MenuModule } from './menu/menu.module';
 import { Category } from './entities/Category';
 import { Item } from './entities/Item';
@@ -10,6 +9,7 @@ import { Size } from './entities/Size';
 import { PaymentMethod } from './entities/PaymentMethod';
 import { Sales } from './entities/Sales';
 import { SalesDetail } from './entities/SalesDetail';
+import { SalesModule } from './sales/sales.module';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -35,8 +35,8 @@ const isDevelopment = process.env.NODE_ENV === 'development';
         logging: true,
       }),
     }),
-    PaymentModule,
     MenuModule,
+    SalesModule,
   ],
   controllers: [AppController],
   providers: [],
