@@ -1,12 +1,23 @@
 import {
+  IsNumber,
+  IsString,
   IsBoolean,
   IsDecimal,
   IsNotEmpty,
-  IsNumber,
-  IsString,
 } from 'class-validator';
 
-export class ItemInPaymentDto {
+export class CreateEmptySalesDto {
+  @IsString()
+  readonly paymentMethodId: number;
+
+  @IsNumber()
+  readonly givenPrice?: number;
+
+  @IsNumber()
+  readonly totalAmount?: number;
+}
+
+export class ItemInSalesDto {
   @IsNumber()
   readonly itemId: number;
 
@@ -23,7 +34,7 @@ export class ItemInPaymentDto {
   readonly isIce: number;
 }
 
-export class CreatePaymentDto {
+export class CreateSalesDto {
   @IsString()
   readonly paymentMethod: 'CASH' | 'CARD';
 
@@ -31,5 +42,5 @@ export class CreatePaymentDto {
   readonly givenPrice?: number;
 
   @IsNotEmpty()
-  readonly itemList: ItemInPaymentDto[];
+  readonly itemList: ItemInSalesDto[];
 }

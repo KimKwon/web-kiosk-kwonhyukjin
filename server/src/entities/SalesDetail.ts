@@ -1,10 +1,8 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Item } from './Item';
 import { Sales } from './Sales';
 import { Size } from './Size';
 
-@Index('fk_sales_detail_item1_idx', ['itemId'], {})
-@Index('fk_sales_detail_size1_idx', ['sizeId'], {})
 @Entity('sales_detail', { schema: 'kioskdb' })
 export class SalesDetail {
   @Column('tinyint', { name: 'is_ice', nullable: true })
