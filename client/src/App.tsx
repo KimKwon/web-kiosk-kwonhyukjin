@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Button from './components/common/Button';
 import mixin from './cores/styles/mixin';
 
 function App() {
@@ -10,6 +11,19 @@ function App() {
         aliquam adipisci incidunt quidem.
       </P>
       <PPAP />
+      <Button variant="contained" color="primary">
+        담기
+      </Button>
+      <br />
+      <br />
+      <Button variant="outlined" color="primary" size="sm">
+        Grande
+      </Button>
+      <br />
+      <br />
+      <Button variant="contained" color="primary" size="sm">
+        Tall
+      </Button>
     </div>
   );
 }
