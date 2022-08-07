@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { ColorType } from '../../cores/styles/theme';
+import { pasreCamelToKebab } from '../../utils/parse';
 
 const VARIANT_MAP = {
   contained: (bgColor: ButtonProps['color']) => css`
@@ -41,16 +42,33 @@ interface ButtonProps {
   endIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   children: JSX.Element | React.ReactNode;
   size?: 'lg' | 'sm' | 'huge';
+  extraStyle?: {
+    [cssKey: string]: string;
+  };
 }
 
-interface StyledButtonProps extends Pick<ButtonProps, 'variant' | 'color' | 'size'> {
+interface StyledButtonProps extends Pick<ButtonProps, 'variant' | 'color' | 'size' | 'extraStyle'> {
   isAnyIcon: boolean;
 }
 
 function Button(props: ButtonProps) {
-  const { children, variant, color, size, startIcon: StartIcon, endIcon: EndIcon } = props;
+  const {
+    children,
+    variant,
+    color,
+    size,
+    startIcon: StartIcon,
+    endIcon: EndIcon,
+    extraStyle,
+  } = props;
   return (
-    <StButton variant={variant} color={color} size={size} isAnyIcon={!!StartIcon || !!EndIcon}>
+    <StButton
+      extraStyle={extraStyle}
+      variant={variant}
+      color={color}
+      size={size}
+      isAnyIcon={!!StartIcon || !!EndIcon}
+    >
       {StartIcon && <StartIcon />}
       {children}
     </StButton>
@@ -66,6 +84,16 @@ const StButton = styled.button<StyledButtonProps>`
   align-items: center;
 
   border-radius: 15px;
+
+  ${({ extraStyle }) =>
+    extraStyle &&
+    Object.entries(extraStyle).reduce(
+      (acc, [cssKey, cssValue]) =>
+        acc.concat(`
+    ${pasreCamelToKebab(cssKey)}: ${cssValue};
+  `),
+      '',
+    )};
 `;
 
 export default Button;

@@ -16,6 +16,9 @@ function App() {
       <Button variant="contained" color="primary">
         담기
       </Button>
+      <Button variant="contained" color="gray02">
+        돌아가기
+      </Button>
       <br />
       <br />
       <Button variant="outlined" color="primary" size="sm">
@@ -23,7 +26,14 @@ function App() {
       </Button>
       <br />
       <br />
-      <Button variant="contained" color="primary" size="sm">
+      <Button
+        variant="contained"
+        color="primary"
+        size="sm"
+        extraStyle={{
+          fontWeight: '100',
+        }}
+      >
         Tall
       </Button>
       <br />
