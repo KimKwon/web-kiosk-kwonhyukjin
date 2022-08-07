@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import Button from './components/common/Button';
 import mixin from './cores/styles/mixin';
+import { ReactComponent as CardIcon } from './assets/icons/payment-card.svg';
+import { ReactComponent as CashIcon } from './assets/icons/10000.svg';
 
 function App() {
   return (
@@ -23,6 +25,16 @@ function App() {
       <br />
       <Button variant="contained" color="primary" size="sm">
         Tall
+      </Button>
+      <br />
+      <br />
+      <Button variant="contained" color="primary" size="huge" startIcon={CardIcon}>
+        카드결제
+      </Button>
+      <br />
+      <br />
+      <Button variant="contained" color="primary" size="huge" startIcon={CashIcon}>
+        현금결제
       </Button>
     </div>
   );
