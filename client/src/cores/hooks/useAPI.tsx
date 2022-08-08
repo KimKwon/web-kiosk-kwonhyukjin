@@ -14,8 +14,8 @@ interface APIError {
   code?: number;
 }
 
-function useAPI<RequestData>(config: APIConfig<RequestData>) {
-  const [response, setResponse] = useState();
+function useAPI<ResponseData, RequestData = Record<string, never>>(config: APIConfig<RequestData>) {
+  const [response, setResponse] = useState<ResponseData>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<APIError>();
   const [shouldRefetch, setShouldRefetch] = useState(0);
