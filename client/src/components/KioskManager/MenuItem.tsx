@@ -15,7 +15,7 @@ function MenuItem({ menuInfo }: { menuInfo: Pick<MenuType, 'name' | 'price' | 't
 
 const MenuBox = styled.article`
   width: 198px;
-  height: 276px;
+  max-height: 276px;
 
   display: flex;
   flex-direction: column;

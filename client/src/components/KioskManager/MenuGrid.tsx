@@ -19,9 +19,17 @@ function MenuGrid(props: MenuGridProps) {
 
 const SectionContainer = styled.section`
   flex: 2;
+
+  height: 600px;
+  overflow-y: auto;
+  padding: 5px;
+
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 198px);
+  justify-content: center;
   gap: 24px;
+
+  user-select: none;
 `;
 
 export default MenuGrid;
