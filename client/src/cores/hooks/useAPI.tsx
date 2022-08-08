@@ -53,7 +53,6 @@ function useAPI<RequestData = Record<string, never>>(
        */
 
       if (axios.isAxiosError(error)) {
-        console.log('isAxiosError');
         /**
          * TODO :: 에러코드 정의하기
          *

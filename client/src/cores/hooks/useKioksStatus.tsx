@@ -19,8 +19,6 @@ function useKioskStatus() {
     function handleKioskChange({ detail }: CustomEvent) {
       const { nextKioskStatus } = detail;
       setKioskStatus(nextKioskStatus);
-
-      console.log('키오스크체인지?');
     }
     window.addEventListener('kioskstatuschange', handleKioskChange as EventListener);
 
