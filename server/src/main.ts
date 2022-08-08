@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 
+const PORT = process.env.NODE_ENV === 'production' ? 3000 : 4000;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
@@ -12,6 +14,6 @@ async function bootstrap() {
     }),
   );
   app.setGlobalPrefix('api');
-  await app.listen(3000);
+  await app.listen(PORT);
 }
 bootstrap();
