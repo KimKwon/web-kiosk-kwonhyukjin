@@ -18,7 +18,7 @@ interface CartInfoType {
 }
 
 function KioskManager({ data }: KioskProps) {
-  const [selectedCategoryIdx, setselectedCategoryIdx] = useState(data[0].id);
+  const [selectedCategoryIdx, setselectedCategoryIdx] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cartInfo, setCartInfo] = useState<CartInfoType[]>([]);
 
