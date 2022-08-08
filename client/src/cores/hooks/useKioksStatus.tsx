@@ -16,14 +16,15 @@ function useKioskStatus() {
   const [kioskStatus, setKioskStatus] = useState<KioskStatus>('IDLE');
 
   useEffect(() => {
-    function handleKioskChange({ detail }: CustomEvent) {
-      const { nextKioskStatus } = detail;
+    function handleKioskChange(e: Event) {
+      if (!(e instanceof CustomEvent)) return;
+      const { nextKioskStatus } = e.detail;
       setKioskStatus(nextKioskStatus);
     }
-    window.addEventListener('kioskstatuschange', handleKioskChange as EventListener);
+    window.addEventListener('kioskstatuschange', handleKioskChange);
 
     return () => {
-      window.removeEventListener('kioskstatuschange', handleKioskChange as EventListener);
+      window.removeEventListener('kioskstatuschange', handleKioskChange);
     };
   }, []);
 
