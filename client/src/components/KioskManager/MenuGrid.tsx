@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { MenuType } from '../../App';
-import MenuItem from '../common/MenuItem';
+import MenuItem from './MenuItem';
 
 interface MenuGridProps {
   currentMenuList: MenuType[];
