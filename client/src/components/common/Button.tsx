@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { ColorType } from '../../cores/styles/theme';
-import { pasreCamelToKebab } from '../../utils/parse';
+import { parseCamelToKebab } from '../../utils/parse';
 
 const VARIANT_MAP = {
   contained: (bgColor: ButtonProps['color']) => css`
@@ -90,7 +90,7 @@ const StButton = styled.button<StyledButtonProps>`
     Object.entries(extraStyle).reduce(
       (acc, [cssKey, cssValue]) =>
         acc.concat(`
-    ${pasreCamelToKebab(cssKey)}: ${cssValue};
+    ${parseCamelToKebab(cssKey)}: ${cssValue};
   `),
       '',
     )};
