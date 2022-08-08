@@ -3,7 +3,7 @@ import KioskManager from './components/KioskManager';
 import useAPI, { BaseAPI } from './cores/hooks/useAPI';
 import useKioskStatus from './cores/hooks/useKioksStatus';
 
-interface Menu {
+export interface MenuType {
   id: number;
   name: string;
   price: number;
@@ -15,14 +15,14 @@ interface Menu {
 export interface CategorizedMenu {
   id: number;
   name: string;
-  items: Menu[];
+  items: MenuType[];
 }
 
 function App() {
   const { data, isLoading } = useAPI({
     url: 'menu',
     method: 'GET',
-  }) as BaseAPI<CategorizedMenu>;
+  }) as BaseAPI<CategorizedMenu[]>;
 
   const { kioskStatus } = useKioskStatus();
 

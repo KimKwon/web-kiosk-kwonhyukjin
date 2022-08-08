@@ -1,19 +1,70 @@
+import { useState } from 'react';
+import styled from 'styled-components';
 import { CategorizedMenu } from '../../App';
-import { changeKioskStatus } from '../../cores/hooks/useKioksStatus';
-import Button from '../common/Button';
-
+import { ReactComponent as Logo } from '../../assets/logo.svg';
+import CategoryTab from './CategoryTab';
+import MenuGrid from './MenuGrid';
+import ShoppingCart from './ShoppingCart';
 interface KioskProps {
-  data: CategorizedMenu;
+  data: CategorizedMenu[];
+}
+
+interface CartInfoType {
+  menuId: number;
+  sizeId: number;
+  total: number;
+  amount: number;
+  isIce: boolean;
 }
 
 function KioskManager({ data }: KioskProps) {
+  const [selectedCategoryIdx, setselectedCategoryIdx] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cartInfo, setCartInfo] = useState<CartInfoType[]>([]);
   return (
-    <div>
-      <Button variant="contained" color="primary" onClick={() => changeKioskStatus('IDLE')}>
-        키오스크 메인으로~
-      </Button>
-    </div>
+    <KioskContainer>
+      <header>
+        <Logo />
+      </header>
+      <Delimiter />
+      <KioskContent>
+        <CategoryTab />
+        <section>
+          <MenuGrid currentMenuList={data[selectedCategoryIdx].items} />
+          <ShoppingCart />
+        </section>
+      </KioskContent>
+    </KioskContainer>
   );
 }
+
+const KioskContainer = styled.main`
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & > header {
+    padding: 20px 0;
+  }
+`;
+
+const KioskContent = styled.section`
+  width: 100%;
+  padding: 35px 183px;
+
+  & > section {
+    width: 100%;
+    display: flex;
+  }
+`;
+
+const Delimiter = styled.div`
+  width: 100%;
+  height: 1px;
+
+  border: 2px solid ${({ theme }) => theme.colors.gray01};
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.25);
+`;
 
 export default KioskManager;
