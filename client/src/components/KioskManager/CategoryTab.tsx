@@ -1,27 +1,31 @@
 import styled from 'styled-components';
+import { ReactComponent as LeftPolygon } from '../../assets/icons/left-polygon.svg';
+import { ReactComponent as RightPolygon } from '../../assets/icons/right-polygon.svg';
 
 interface CategoryTabProps {
   categories: Array<{
     id: number;
     name: string;
   }>;
-  selectedCategoryId: number;
-  changeCategoryId: (nextCategoryId: number) => void;
+  selectedCategoryIdx: number;
+  changeCategoryIdx: (nextCategoryIdx: number) => void;
 }
 
 function CategoryTab(props: CategoryTabProps) {
-  const { categories, changeCategoryId, selectedCategoryId } = props;
+  const { categories, changeCategoryIdx, selectedCategoryIdx } = props;
   return (
     <CategoryTabNav>
+      <LeftPolygon />
       {categories.map(({ id, name }) => (
         <CategoryTabElement
           key={id}
-          onClick={() => changeCategoryId(id)}
-          selected={selectedCategoryId === id}
+          onClick={() => changeCategoryIdx(id)}
+          selected={selectedCategoryIdx === id}
         >
           {name}
         </CategoryTabElement>
       ))}
+      <RightPolygon />
     </CategoryTabNav>
   );
 }

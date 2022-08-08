@@ -18,7 +18,7 @@ interface CartInfoType {
 }
 
 function KioskManager({ data }: KioskProps) {
-  const [selectedCategoryId, setselectedCategoryId] = useState(data[0].id);
+  const [selectedCategoryIdx, setselectedCategoryIdx] = useState(data[0].id);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cartInfo, setCartInfo] = useState<CartInfoType[]>([]);
 
@@ -27,7 +27,7 @@ function KioskManager({ data }: KioskProps) {
       id,
       name,
     }));
-  const changeCategoryId = (nextCategoryId: number) => setselectedCategoryId(nextCategoryId);
+  const changeCategoryIdx = (nextCategoryIdx: number) => setselectedCategoryIdx(nextCategoryIdx);
 
   return (
     <KioskContainer>
@@ -38,11 +38,11 @@ function KioskManager({ data }: KioskProps) {
       <KioskContent>
         <CategoryTab
           categories={getCategories()}
-          selectedCategoryId={selectedCategoryId}
-          changeCategoryId={changeCategoryId}
+          selectedCategoryIdx={selectedCategoryIdx}
+          changeCategoryIdx={changeCategoryIdx}
         />
         <section>
-          <MenuGrid currentMenuList={data[selectedCategoryId]?.items || []} />
+          <MenuGrid currentMenuList={data[selectedCategoryIdx]?.items || []} />
           <ShoppingCart />
         </section>
       </KioskContent>
