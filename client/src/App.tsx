@@ -1,68 +1,45 @@
-import styled from 'styled-components';
-import Button from './components/common/Button';
-import mixin from './cores/styles/mixin';
-import { ReactComponent as CardIcon } from './assets/icons/payment-card.svg';
-import { ReactComponent as CashIcon } from './assets/icons/10000.svg';
+import IdleKioskScreen from './components/IdleKioskScreen';
+import KioskManager from './components/KioskManager';
+import useAPI, { BaseAPI } from './cores/hooks/useAPI';
+import useKioskStatus from './cores/hooks/useKioksStatus';
 
-function App() {
-  return (
-    <div>
-      <P>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint culpa, perspiciatis cum sequi
-        quae dolores distinctio hic eius iusto commodi neque odit voluptatem. Quibusdam in, voluptas
-        aliquam adipisci incidunt quidem.
-      </P>
-      <PPAP />
-      <Button variant="contained" color="primary">
-        담기
-      </Button>
-      <Button variant="contained" color="gray02">
-        돌아가기
-      </Button>
-      <br />
-      <br />
-      <Button variant="outlined" color="primary" size="sm">
-        Grande
-      </Button>
-      <br />
-      <br />
-      <Button
-        variant="contained"
-        color="primary"
-        size="sm"
-        extraStyle={{
-          fontWeight: '100',
-        }}
-      >
-        Tall
-      </Button>
-      <br />
-      <br />
-      <Button variant="contained" color="primary" size="huge" startIcon={CardIcon}>
-        카드결제
-      </Button>
-      <br />
-      <br />
-      <Button variant="contained" color="primary" size="huge" startIcon={CashIcon}>
-        현금결제
-      </Button>
-    </div>
-  );
+interface Menu {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  thumbnail: string;
+  specificTemperatureOnly: 'HOT' | 'ICED' | null;
 }
 
-const P = styled.p`
-  width: 200px;
-  color: ${({ theme }) => theme.colors.primary};
-  ${mixin.textEllipsis(2)}
-`;
+export interface CategorizedMenu {
+  id: number;
+  name: string;
+  items: Menu[];
+}
 
-const PPAP = styled.p`
-  width: 200px;
-  height: 300px;
-  ${mixin.backgroundImage(
-    'https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1567008394/noticon/ohybolu4ensol1gzqas1.png',
-    { contain: true, repeat: true },
-  )}
-`;
+function App() {
+  const { data, isLoading } = useAPI({
+    url: 'menu',
+    method: 'GET',
+  }) as BaseAPI<CategorizedMenu>;
+
+  const { kioskStatus } = useKioskStatus();
+
+  const screenHandler = () => {
+    switch (kioskStatus) {
+      case 'IDLE':
+        return <IdleKioskScreen isMenuReady={Boolean(!isLoading && data)} />;
+      case 'SHOPPING':
+        if (!data) throw Error('키오스크 데이터를 불러오지 못했어요.');
+        // 최상단 Error Boundary에 의해 처리되게 할 예정
+        return <KioskManager data={data} />;
+      default:
+        return <IdleKioskScreen isMenuReady={Boolean(!isLoading && data)} />;
+    }
+  };
+
+  return screenHandler();
+}
 
 export default App;
