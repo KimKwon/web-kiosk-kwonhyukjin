@@ -60,6 +60,7 @@ function Button(props: ButtonProps) {
     startIcon: StartIcon,
     endIcon: EndIcon,
     extraStyle,
+    onClick,
   } = props;
   return (
     <StButton
@@ -68,6 +69,7 @@ function Button(props: ButtonProps) {
       color={color}
       size={size}
       isAnyIcon={!!StartIcon || !!EndIcon}
+      onClick={onClick}
     >
       {StartIcon && <StartIcon />}
       {children}
