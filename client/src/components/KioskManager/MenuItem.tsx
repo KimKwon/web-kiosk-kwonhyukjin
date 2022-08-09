@@ -23,13 +23,12 @@ const MenuBox = styled.article`
   gap: 22px;
 
   border-radius: 12px;
-  background-color: ${({ theme }) => theme.colors.background02};
   box-shadow: 2px 3px 3px 3px rgba(0, 0, 0, 0.25);
 
   padding: 22px 35px;
 
   & > img {
-    width: 78px;
+    width: 100%;
     height: 140px;
 
     object-fit: cover;
