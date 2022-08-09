@@ -32,6 +32,11 @@ const SIZE_MAP = {
     font-weight: 700;
     padding: 62px 93px;
   `,
+  xs: css`
+    font-size: 25px;
+    font-weight: 700;
+    padding: 22px 39px;
+  `,
 };
 
 interface ButtonProps {
@@ -41,7 +46,7 @@ interface ButtonProps {
   startIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   endIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   children: JSX.Element | React.ReactNode;
-  size?: 'lg' | 'sm' | 'huge';
+  size?: 'lg' | 'sm' | 'huge' | 'xs';
   extraStyle?: {
     [cssKey: string]: string;
   };
