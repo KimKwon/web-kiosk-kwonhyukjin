@@ -1,15 +1,15 @@
 import { CartInfoType } from '../KioskManager';
 
 interface PaymentManagerProps {
-  CloseButton: JSX.Element;
+  closeButton: JSX.Element;
   cartInfoList: CartInfoType[];
 }
 
-function PaymentManager({ CloseButton }: PaymentManagerProps) {
+function PaymentManager({ closeButton }: PaymentManagerProps) {
   return (
     <div>
       <div>결제매니저</div>
-      {CloseButton}
+      {closeButton}
     </div>
   );
 }

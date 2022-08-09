@@ -8,6 +8,7 @@ import MenuGrid from './KioskMenu/MenuGrid';
 import ShoppingCart from './KioskCart/ShoppingCart';
 import Modal from '../common/Modal';
 import PaymentManager from '../PaymentManager';
+import MenuDetail from './KioskMenu/MenuDetail';
 interface KioskProps {
   data: CategorizedMenu[];
 }
@@ -26,7 +27,7 @@ export interface CartInfoType {
 function KioskManager({ data }: KioskProps) {
   const [selectedCategoryIdx, setselectedCategoryIdx] = useState(0);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [isShoppingModalOpen, setIsShoppingModalOpen] = useState(false);
+  const [isShoppingModalOpen, setIsShoppingModalOpen] = useState(true);
   const [cartInfoList, setCartInfoList] = useState<CartInfoType[]>([
     {
       cartElementId: 1,
@@ -78,8 +79,9 @@ function KioskManager({ data }: KioskProps) {
     setCartInfoList([]);
   };
 
-  const closeModal = () => {
-    setIsPaymentModalOpen(false);
+  const closeModal = (type: 'PAYMENT' | 'SHOPPING') => {
+    const targetModalSetter = type === 'PAYMENT' ? setIsPaymentModalOpen : setIsShoppingModalOpen;
+    return () => targetModalSetter(false);
   };
 
   return (
@@ -103,11 +105,15 @@ function KioskManager({ data }: KioskProps) {
           />
         </section>
       </KioskContent>
+
+      <Modal isOpen={isShoppingModalOpen}>
+        <MenuDetail closeModal={closeModal('SHOPPING')} />
+      </Modal>
       <Modal isOpen={isPaymentModalOpen}>
         <PaymentManager
           cartInfoList={cartInfoList}
-          CloseButton={
-            <button onClick={closeModal}>
+          closeButton={
+            <button onClick={closeModal('PAYMENT')}>
               <XCircle />
             </button>
           }
