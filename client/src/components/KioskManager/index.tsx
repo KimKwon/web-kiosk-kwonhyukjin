@@ -3,15 +3,18 @@ import styled from 'styled-components';
 import { CategorizedMenu } from '../../App';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import CategoryTab from './CategoryTab';
-import MenuGrid from './MenuGrid';
-import ShoppingCart from './ShoppingCart';
+import MenuGrid from './KioskMenu/MenuGrid';
+import ShoppingCart from './KioskCart/ShoppingCart';
 interface KioskProps {
   data: CategorizedMenu[];
 }
 
-interface CartInfoType {
+export interface CartInfoType {
+  cartElementId: number;
   menuId: number;
+  menuName: string;
   sizeId: number;
+  sizeName: string;
   total: number;
   amount: number;
   isIce: boolean;
@@ -20,7 +23,38 @@ interface CartInfoType {
 function KioskManager({ data }: KioskProps) {
   const [selectedCategoryIdx, setselectedCategoryIdx] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cartInfo, setCartInfo] = useState<CartInfoType[]>([]);
+  const [cartInfoList, setCartInfoList] = useState<CartInfoType[]>([
+    {
+      cartElementId: 1,
+      menuId: 1,
+      menuName: '크림 아메리카노',
+      sizeId: 1,
+      sizeName: 'Venti',
+      total: 9000,
+      amount: 2,
+      isIce: true,
+    },
+    {
+      cartElementId: 2,
+      menuId: 1,
+      menuName: '과테말라 아야르자',
+      sizeId: 1,
+      sizeName: 'Grande',
+      total: 15000,
+      amount: 10,
+      isIce: false,
+    },
+    {
+      cartElementId: 3,
+      menuId: 1,
+      menuName: '콜롬비아 안티오키아',
+      sizeId: 1,
+      sizeName: 'Tall',
+      total: 267000,
+      amount: 97,
+      isIce: true,
+    },
+  ]);
 
   const getCategories = () =>
     data.map(({ id, name }) => ({
@@ -28,6 +62,16 @@ function KioskManager({ data }: KioskProps) {
       name,
     }));
   const changeCategoryIdx = (nextCategoryIdx: number) => setselectedCategoryIdx(nextCategoryIdx);
+
+  const removeFromCartInfoList = (targetId: number) => {
+    setCartInfoList((prevCartInfoList) =>
+      prevCartInfoList.filter(({ cartElementId }) => cartElementId !== targetId),
+    );
+  };
+
+  const clearCartInfoList = () => {
+    setCartInfoList([]);
+  };
 
   return (
     <KioskContainer>
@@ -43,7 +87,11 @@ function KioskManager({ data }: KioskProps) {
         />
         <section>
           <MenuGrid currentMenuList={data[selectedCategoryIdx]?.items || []} />
-          <ShoppingCart />
+          <ShoppingCart
+            cartInfoList={cartInfoList}
+            clearCartInfoList={clearCartInfoList}
+            removeFromCartInfoList={removeFromCartInfoList}
+          />
         </section>
       </KioskContent>
     </KioskContainer>
