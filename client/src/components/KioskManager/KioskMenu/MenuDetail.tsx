@@ -2,6 +2,7 @@ import Button from '../../common/Button';
 
 interface MenuDetailProps {
   closeModal: () => void;
+  menuId: number | null;
 }
 
 function MenuDetail({ closeModal }: MenuDetailProps) {

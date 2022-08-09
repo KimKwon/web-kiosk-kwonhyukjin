@@ -2,10 +2,15 @@ import styled from 'styled-components';
 import { MenuType } from '../../../App';
 import mixin from '../../../cores/styles/mixin';
 
-function MenuItem({ menuInfo }: { menuInfo: Pick<MenuType, 'name' | 'price' | 'thumbnail'> }) {
-  const { name, price, thumbnail } = menuInfo;
+interface MenuItemInterface {
+  onClickMenu: (menuId: number) => void;
+  menuInfo: Pick<MenuType, 'name' | 'price' | 'thumbnail' | 'id'>;
+}
+
+function MenuItem({ menuInfo, onClickMenu }: MenuItemInterface) {
+  const { name, price, thumbnail, id } = menuInfo;
   return (
-    <MenuBox>
+    <MenuBox onClick={() => onClickMenu(id)}>
       <img src={thumbnail} alt="menu-thumbnail" />
       <p className="menu-name">{name}</p>
       <p className="menu-price">{price.toLocaleString()}</p>

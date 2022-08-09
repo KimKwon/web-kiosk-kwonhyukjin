@@ -1,20 +1,12 @@
 import styled from 'styled-components';
-import { MenuType } from '../../../App';
-import MenuItem from './MenuItem';
 
 interface MenuGridProps {
-  currentMenuList: MenuType[];
+  children: JSX.Element[];
 }
 
 function MenuGrid(props: MenuGridProps) {
-  const { currentMenuList } = props;
-  return (
-    <SectionContainer>
-      {currentMenuList.map((menu) => (
-        <MenuItem key={menu.id} menuInfo={menu} />
-      ))}
-    </SectionContainer>
-  );
+  const { children } = props;
+  return <SectionContainer>{children}</SectionContainer>;
 }
 
 const SectionContainer = styled.section`
