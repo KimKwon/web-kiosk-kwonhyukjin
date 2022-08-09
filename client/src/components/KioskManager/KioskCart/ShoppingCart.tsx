@@ -7,12 +7,29 @@ import CartElement from './CartElement';
 interface ShoppingCartProps {
   cartInfoList: CartInfoType[];
   removeFromCartInfoList: (cartElementId: number) => void;
+  clearCartInfoList: () => void;
 }
 
 function ShoppingCart(props: ShoppingCartProps) {
-  const { cartInfoList, removeFromCartInfoList } = props;
+  const { cartInfoList, removeFromCartInfoList, clearCartInfoList } = props;
+
+  const isCartEmpty = cartInfoList.length === 0;
 
   const getTotalPrice = () => cartInfoList.reduce((acc, { total }) => acc + total, 0);
+
+  const handlePayment = () => {
+    if (isCartEmpty) {
+      /**
+       * 메뉴를 선택해주세요!
+       * AlertBox 보여주기
+       */
+      return;
+    }
+
+    /**
+     * 결제모달을 핸들링하는 로직 배치
+     */
+  };
 
   return (
     <CartContainer>
@@ -25,10 +42,10 @@ function ShoppingCart(props: ShoppingCartProps) {
       ))}
 
       <CardButtonWrapper>
-        <Button variant="contained" size="xs" color="gray02">
+        <Button onClick={clearCartInfoList} variant="contained" size="xs" color="gray02">
           전체 취소
         </Button>
-        <Button variant="contained" size="xs" color="primary">
+        <Button onClick={handlePayment} variant="contained" size="xs" color="primary">
           <PaymentButtonInnerText>
             <p>결제하기</p>
             <span className="cart-total-price">{getTotalPrice().toLocaleString()}</span>

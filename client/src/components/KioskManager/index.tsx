@@ -69,6 +69,10 @@ function KioskManager({ data }: KioskProps) {
     );
   };
 
+  const clearCartInfoList = () => {
+    setCartInfoList([]);
+  };
+
   return (
     <KioskContainer>
       <header>
@@ -85,6 +89,7 @@ function KioskManager({ data }: KioskProps) {
           <MenuGrid currentMenuList={data[selectedCategoryIdx]?.items || []} />
           <ShoppingCart
             cartInfoList={cartInfoList}
+            clearCartInfoList={clearCartInfoList}
             removeFromCartInfoList={removeFromCartInfoList}
           />
         </section>
