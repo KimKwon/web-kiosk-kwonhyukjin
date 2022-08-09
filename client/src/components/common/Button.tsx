@@ -35,7 +35,7 @@ const SIZE_MAP = {
   xs: css`
     font-size: 25px;
     font-weight: 700;
-    padding: 22px 39px;
+    padding: 22px 45px;
   `,
 };
 
