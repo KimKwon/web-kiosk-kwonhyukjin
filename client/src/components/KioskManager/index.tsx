@@ -2,9 +2,14 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { CategorizedMenu } from '../../App';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
+import { ReactComponent as XCircle } from '../../assets/icons/x-circle.svg';
 import CategoryTab from './CategoryTab';
 import MenuGrid from './KioskMenu/MenuGrid';
 import ShoppingCart from './KioskCart/ShoppingCart';
+import Modal from '../common/Modal';
+import PaymentManager from '../PaymentManager';
+import MenuDetail from './KioskMenu/MenuDetail';
+import MenuItem from './KioskMenu/MenuItem';
 interface KioskProps {
   data: CategorizedMenu[];
 }
@@ -22,7 +27,9 @@ export interface CartInfoType {
 
 function KioskManager({ data }: KioskProps) {
   const [selectedCategoryIdx, setselectedCategoryIdx] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isShoppingModalOpen, setIsShoppingModalOpen] = useState(false);
+  const [currentShoppingMenuId, setCurrentShoppingMenuId] = useState<number | null>(null);
   const [cartInfoList, setCartInfoList] = useState<CartInfoType[]>([
     {
       cartElementId: 1,
@@ -61,6 +68,7 @@ function KioskManager({ data }: KioskProps) {
       id,
       name,
     }));
+
   const changeCategoryIdx = (nextCategoryIdx: number) => setselectedCategoryIdx(nextCategoryIdx);
 
   const removeFromCartInfoList = (targetId: number) => {
@@ -71,6 +79,19 @@ function KioskManager({ data }: KioskProps) {
 
   const clearCartInfoList = () => {
     setCartInfoList([]);
+  };
+
+  const closeModal = (type: 'PAYMENT' | 'SHOPPING') => {
+    const targetModalSetter = type === 'PAYMENT' ? setIsPaymentModalOpen : setIsShoppingModalOpen;
+    return () => {
+      targetModalSetter(false);
+      setCurrentShoppingMenuId(null);
+    };
+  };
+
+  const openModalWithSelectedMenu = (menuId: number) => {
+    setCurrentShoppingMenuId(menuId);
+    setIsShoppingModalOpen(true);
   };
 
   return (
@@ -86,7 +107,11 @@ function KioskManager({ data }: KioskProps) {
           changeCategoryIdx={changeCategoryIdx}
         />
         <section>
-          <MenuGrid currentMenuList={data[selectedCategoryIdx]?.items || []} />
+          <MenuGrid>
+            {data[selectedCategoryIdx]?.items?.map((menu) => (
+              <MenuItem key={menu.id} menuInfo={menu} onClickMenu={openModalWithSelectedMenu} />
+            )) || []}
+          </MenuGrid>
           <ShoppingCart
             cartInfoList={cartInfoList}
             clearCartInfoList={clearCartInfoList}
@@ -94,6 +119,20 @@ function KioskManager({ data }: KioskProps) {
           />
         </section>
       </KioskContent>
+
+      <Modal isOpen={isShoppingModalOpen}>
+        <MenuDetail menuId={currentShoppingMenuId} closeModal={closeModal('SHOPPING')} />
+      </Modal>
+      <Modal isOpen={isPaymentModalOpen}>
+        <PaymentManager
+          cartInfoList={cartInfoList}
+          closeButton={
+            <button onClick={closeModal('PAYMENT')}>
+              <XCircle />
+            </button>
+          }
+        />
+      </Modal>
     </KioskContainer>
   );
 }
@@ -105,19 +144,20 @@ const KioskContainer = styled.main`
   flex-direction: column;
   align-items: center;
   & > header {
-    padding: 20px 0;
+    padding: 10px 0;
   }
 `;
 
 const KioskContent = styled.section`
   width: 100%;
-  padding: 35px 183px;
+  padding: 20px 160px;
+  padding-bottom: 0;
 
   & > section {
     width: 100%;
     display: flex;
 
-    margin-top: 57px;
+    margin-top: 36px;
   }
 `;
 

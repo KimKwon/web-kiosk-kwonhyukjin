@@ -60,9 +60,13 @@ const OptionWrapper = styled.div`
       text-align: start;
     }
 
-    &.element-temperature,
+    &.element-temperature {
+      width: 12%;
+      letter-spacing: -0.02em;
+    }
     &.element-size {
       width: 15%;
+      letter-spacing: -0.05em;
     }
     &.element-amount {
       width: 5%;
