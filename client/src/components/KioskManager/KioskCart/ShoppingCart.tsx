@@ -1,15 +1,38 @@
 import styled from 'styled-components';
+import { CartInfoType } from '../index';
+import CartElement from './CartElement';
 
-function ShoppingCart() {
-  return <CartContainer>쇼핑카트</CartContainer>;
+interface ShoppingCartProps {
+  cartInfoList: CartInfoType[];
+  removeFromCartInfoList: (cartElementId: number) => void;
 }
 
-const CartContainer = styled.div`
+function ShoppingCart(props: ShoppingCartProps) {
+  const { cartInfoList, removeFromCartInfoList } = props;
+  return (
+    <CartContainer>
+      {cartInfoList.map((cartInfo) => (
+        <CartElement
+          key={cartInfo.cartElementId}
+          cartInfo={cartInfo}
+          removeFromCartInfoList={removeFromCartInfoList}
+        />
+      ))}
+    </CartContainer>
+  );
+}
+
+const CartContainer = styled.ul`
   flex: 1;
+  height: 577px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 
   margin: 5px;
+  padding: 36px 30px;
 
-  height: 577px;
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.background};
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.25);

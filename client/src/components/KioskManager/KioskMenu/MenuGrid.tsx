@@ -26,7 +26,7 @@ const SectionContainer = styled.section`
 
   display: grid;
   grid-template-columns: repeat(3, 198px);
-  justify-content: center;
+  justify-content: flex-start;
   gap: 24px;
 
   user-select: none;
