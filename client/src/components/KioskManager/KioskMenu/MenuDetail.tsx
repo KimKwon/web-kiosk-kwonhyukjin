@@ -1,15 +1,19 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import useAPI, { BaseAPI } from '../../../cores/hooks/useAPI';
+
+import { ColumnWrapper, FlexWrapper } from '../../common/Wrapper';
 import Button from '../../common/Button';
 import Loader from '../../common/Loader';
+
+import mixin from '../../../cores/styles/mixin';
+import { temperature } from '../../../constants/temperature';
+
+import { calcTotalPriceBySurcharge } from '../../../utils/kiosk';
 import { ReactComponent as Minus } from '../../../assets/icons/minus.svg';
 import { ReactComponent as Plus } from '../../../assets/icons/plus.svg';
-import { useState } from 'react';
-import mixin from '../../../cores/styles/mixin';
-import { ColumnWrapper, FlexWrapper } from '../../common/Wrapper';
-import { temperature } from '../../../constants/temperature';
-import { calcTotalPriceBySurcharge } from '../../../utils/kiosk';
-import { CartInfoCreateDto } from '../index';
+
+import type { CartInfoCreateDto } from '../index';
 
 type SizeType = {
   id: number;

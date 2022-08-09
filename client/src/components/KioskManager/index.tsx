@@ -1,15 +1,20 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { CategorizedMenu } from '../../App';
-import { ReactComponent as Logo } from '../../assets/logo.svg';
-import { ReactComponent as XCircle } from '../../assets/icons/x-circle.svg';
+
+import Modal from '../common/Modal';
 import CategoryTab from './CategoryTab';
+
 import MenuGrid from './KioskMenu/MenuGrid';
 import ShoppingCart from './KioskCart/ShoppingCart';
-import Modal from '../common/Modal';
 import PaymentManager from '../PaymentManager';
 import MenuDetail from './KioskMenu/MenuDetail';
 import MenuItem from './KioskMenu/MenuItem';
+
+import { ReactComponent as Logo } from '../../assets/logo.svg';
+import { ReactComponent as XCircle } from '../../assets/icons/x-circle.svg';
+
+import type { CategorizedMenu } from '../../App';
+
 interface KioskProps {
   data: CategorizedMenu[];
 }
