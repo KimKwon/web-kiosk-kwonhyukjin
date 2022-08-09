@@ -2,9 +2,12 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { CategorizedMenu } from '../../App';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
+import { ReactComponent as XCircle } from '../../assets/icons/x-circle.svg';
 import CategoryTab from './CategoryTab';
 import MenuGrid from './KioskMenu/MenuGrid';
 import ShoppingCart from './KioskCart/ShoppingCart';
+import Modal from '../common/Modal';
+import PaymentManager from '../PaymentManager';
 interface KioskProps {
   data: CategorizedMenu[];
 }
@@ -22,7 +25,8 @@ export interface CartInfoType {
 
 function KioskManager({ data }: KioskProps) {
   const [selectedCategoryIdx, setselectedCategoryIdx] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isShoppingModalOpen, setIsShoppingModalOpen] = useState(false);
   const [cartInfoList, setCartInfoList] = useState<CartInfoType[]>([
     {
       cartElementId: 1,
@@ -61,6 +65,7 @@ function KioskManager({ data }: KioskProps) {
       id,
       name,
     }));
+
   const changeCategoryIdx = (nextCategoryIdx: number) => setselectedCategoryIdx(nextCategoryIdx);
 
   const removeFromCartInfoList = (targetId: number) => {
@@ -71,6 +76,10 @@ function KioskManager({ data }: KioskProps) {
 
   const clearCartInfoList = () => {
     setCartInfoList([]);
+  };
+
+  const closeModal = () => {
+    setIsPaymentModalOpen(false);
   };
 
   return (
@@ -94,6 +103,16 @@ function KioskManager({ data }: KioskProps) {
           />
         </section>
       </KioskContent>
+      <Modal isOpen={isPaymentModalOpen}>
+        <PaymentManager
+          cartInfoList={cartInfoList}
+          CloseButton={
+            <button onClick={closeModal}>
+              <XCircle />
+            </button>
+          }
+        />
+      </Modal>
     </KioskContainer>
   );
 }

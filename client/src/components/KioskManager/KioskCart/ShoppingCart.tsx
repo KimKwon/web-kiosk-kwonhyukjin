@@ -42,10 +42,10 @@ function ShoppingCart(props: ShoppingCartProps) {
       ))}
 
       <CardButtonWrapper>
-        <Button onClick={clearCartInfoList} variant="contained" size="xs" color="gray02">
+        <Button onClick={clearCartInfoList} variant="contained" size="md" color="gray02">
           전체 취소
         </Button>
-        <Button onClick={handlePayment} variant="contained" size="xs" color="primary">
+        <Button onClick={handlePayment} variant="contained" size="md" color="primary">
           <PaymentButtonInnerText>
             <p>결제하기</p>
             <span className="cart-total-price">{getTotalPrice().toLocaleString()}</span>
