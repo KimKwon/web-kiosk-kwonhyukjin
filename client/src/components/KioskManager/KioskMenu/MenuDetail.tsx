@@ -8,6 +8,7 @@ import { useState } from 'react';
 import mixin from '../../../cores/styles/mixin';
 import { ColumnWrapper, FlexWrapper } from '../../common/Wrapper';
 import { temperature } from '../../../constants/temperature';
+import { calcTotalPriceBySurcharge } from '../../../utils/kiosk';
 
 type SizeType = {
   surcharge: number;
@@ -33,6 +34,9 @@ interface SelectedOptionsType {
   selectedTemperature: keyof typeof temperature | null;
 }
 
+const MIN_AMOUNT = 1;
+const MAX_AMOUNT = 10;
+
 function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptionsType>({
     amount: 1,
@@ -52,6 +56,33 @@ function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
       ...prevOptions,
       [key]: payload,
     }));
+  };
+
+  const handleChangeAmount = (val: -1 | 1) => {
+    const { amount } = selectedOptions;
+    if (amount + val > MAX_AMOUNT || amount + val < MIN_AMOUNT) {
+      /**
+       * TODO
+       * 카운터에 문의하세요!
+       * Alert 띄우기
+       */
+      return;
+    }
+
+    handleSelectOption('amount', amount + val);
+  };
+
+  const getCurrentTotalPrice = (originPrice: number) => {
+    const { selectedSize, amount } = selectedOptions;
+    if (!selectedSize) return originPrice * amount;
+
+    const { surcharge } = selectedSize;
+
+    return calcTotalPriceBySurcharge({
+      amount,
+      originPrice,
+      surcharge,
+    });
   };
 
   if (isLoading) {
@@ -82,13 +113,13 @@ function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
         <DetailInfo>
           <p className="menu-name">{name}</p>
           <p className="menu-description">{description}</p>
-          <p className="menu-price">{price.toLocaleString()}</p>
+          <p className="menu-price">{getCurrentTotalPrice(price).toLocaleString()}</p>
           <FlexWrapper style={{ gap: '25px' }}>
-            <button type="button">
+            <button type="button" onClick={() => handleChangeAmount(-1)}>
               <Minus />
             </button>
             <span className="menu-amount">{amount}</span>
-            <button type="button">
+            <button type="button" onClick={() => handleChangeAmount(1)}>
               <Plus />
             </button>
           </FlexWrapper>
@@ -130,18 +161,11 @@ function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
           </div>
         </OptionWrapper>
       </ColumnWrapper>
-
       <ButtonWrapper>
-        <Button
-          onClick={closeModal}
-          variant="contained"
-          size="md"
-          color="gray02"
-          extraStyle={{ width: '218px' }}
-        >
+        <Button onClick={closeModal} variant="contained" size="md" color="gray02">
           돌아가기
         </Button>
-        <Button variant="contained" size="md" color="primary" extraStyle={{ width: '218px' }}>
+        <Button variant="contained" size="md" color="primary">
           담기
         </Button>
       </ButtonWrapper>
@@ -165,6 +189,10 @@ const ButtonWrapper = styled(FlexWrapper)`
   margin-top: auto;
   display: flex;
   justify-content: space-between;
+
+  & > button {
+    width: 218px;
+  }
 `;
 
 const ImageBox = styled.div`
