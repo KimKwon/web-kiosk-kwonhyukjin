@@ -4,6 +4,7 @@ import { parseCamelToKebab } from '../../utils/parse';
 
 const VARIANT_MAP = {
   contained: (bgColor: ButtonProps['color']) => css`
+    border: 3px solid ${({ theme }) => theme.colors[bgColor]};
     background-color: ${({ theme }) => theme.colors[bgColor]};
     color: white;
   `,

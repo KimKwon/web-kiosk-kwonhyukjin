@@ -9,6 +9,10 @@ import mixin from '../../../cores/styles/mixin';
 import { ColumnWrapper, FlexWrapper } from '../../common/Wrapper';
 import { temperature } from '../../../constants/temperature';
 
+type SizeType = {
+  surcharge: number;
+  name: string;
+};
 interface MenuDetailResponse {
   id: number;
   name: string;
@@ -16,22 +20,39 @@ interface MenuDetailResponse {
   price: number;
   thumbnail: string;
   specificTemperatureOnly: string;
-  sizes: Array<{
-    surcharge: number;
-    name: string;
-  }>;
+  sizes: SizeType[];
 }
 interface MenuDetailProps {
   closeModal: () => void;
   menuId: number | null;
 }
 
+interface SelectedOptionsType {
+  amount: number;
+  selectedSize: SizeType | null;
+  selectedTemperature: keyof typeof temperature | null;
+}
+
 function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
-  const [menuAmount, setMenuAmount] = useState(1);
+  const [selectedOptions, setSelectedOptions] = useState<SelectedOptionsType>({
+    amount: 1,
+    selectedSize: null,
+    selectedTemperature: null,
+  });
   const { data, isLoading } = useAPI({
     url: `menu/${menuId}`,
     method: 'GET',
   }) as BaseAPI<MenuDetailResponse>;
+
+  const handleSelectOption = (
+    key: keyof SelectedOptionsType,
+    payload: SelectedOptionsType[keyof SelectedOptionsType],
+  ) => {
+    setSelectedOptions((prevOptions) => ({
+      ...prevOptions,
+      [key]: payload,
+    }));
+  };
 
   if (isLoading) {
     return (
@@ -44,6 +65,13 @@ function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
   if (!data) return <DetailBox />;
 
   const { thumbnail, name, sizes, specificTemperatureOnly, description, price } = data;
+
+  const { amount, selectedSize, selectedTemperature } = selectedOptions;
+
+  const possibleTemperatures = Object.values(temperature).filter(
+    (temperatureName) =>
+      specificTemperatureOnly === null || temperatureName === specificTemperatureOnly,
+  );
 
   return (
     <DetailBox>
@@ -59,21 +87,22 @@ function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
             <button type="button">
               <Minus />
             </button>
-            <span className="menu-amount">{menuAmount}</span>
+            <span className="menu-amount">{amount}</span>
             <button type="button">
               <Plus />
             </button>
           </FlexWrapper>
         </DetailInfo>
       </FlexWrapper>
-      <ColumnWrapper style={{ marginTop: '72px', gap: '36px' }}>
+      <ColumnWrapper style={{ marginTop: '72px', gap: '50px' }}>
         <OptionWrapper>
           <OptionLabel>SIZE</OptionLabel>
           <div>
-            {sizes.map(({ surcharge, name }) => (
+            {sizes.map(({ name, surcharge }) => (
               <Button
                 key={name}
-                variant="outlined"
+                onClick={() => handleSelectOption('selectedSize', { name, surcharge })}
+                variant={name === selectedSize?.name ? 'contained' : 'outlined'}
                 color="primary"
                 size="sm"
                 extraStyle={{ borderRadius: '8px' }}
@@ -86,10 +115,11 @@ function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
         <OptionWrapper>
           <OptionLabel>SORT</OptionLabel>
           <div>
-            {Object.values(temperature).map((name) => (
+            {possibleTemperatures.map((name) => (
               <Button
                 key={name}
-                variant="outlined"
+                onClick={() => handleSelectOption('selectedTemperature', name)}
+                variant={name === selectedTemperature ? 'contained' : 'outlined'}
                 color="primary"
                 size="sm"
                 extraStyle={{ borderRadius: '8px' }}
