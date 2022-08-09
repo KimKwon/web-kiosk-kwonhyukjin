@@ -15,27 +15,20 @@ const VARIANT_MAP = {
 };
 
 const SIZE_MAP = {
-  lg: css`
-    min-width: 328px;
-    font-size: 40px;
-    font-weight: 600;
-    padding: 40px 62px;
-  `,
-  sm: css`
-    font-size: 40px;
-    font-weight: 700;
-    padding: 13px 34px;
-  `,
-  huge: css`
-    min-width: 627px;
-    font-size: 60px;
-    font-weight: 700;
-    padding: 62px 93px;
-  `,
-  xs: css`
+  md: css`
     font-size: 25px;
     font-weight: 700;
     padding: 22px 45px;
+  `,
+  sm: css`
+    font-size: 16px;
+    font-weight: 700;
+    padding: 13px 36px;
+  `,
+  lg: css`
+    font-size: 36px;
+    font-weight: 700;
+    padding: 38px 58px;
   `,
 };
 
@@ -46,7 +39,7 @@ interface ButtonProps {
   startIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   endIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   children: JSX.Element | React.ReactNode;
-  size?: 'lg' | 'sm' | 'huge' | 'xs';
+  size?: 'md' | 'sm' | 'lg';
   extraStyle?: {
     [cssKey: string]: string;
   };
@@ -84,7 +77,7 @@ function Button(props: ButtonProps) {
 
 const StButton = styled.button<StyledButtonProps>`
   ${({ variant, color }) => VARIANT_MAP[variant](color)};
-  ${({ size }) => SIZE_MAP[size || 'lg']};
+  ${({ size }) => SIZE_MAP[size || 'sm']};
 
   display: flex;
   justify-content: ${({ isAnyIcon }) => (isAnyIcon ? 'space-between' : 'center')};
