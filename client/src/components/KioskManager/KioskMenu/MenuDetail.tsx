@@ -9,8 +9,10 @@ import mixin from '../../../cores/styles/mixin';
 import { ColumnWrapper, FlexWrapper } from '../../common/Wrapper';
 import { temperature } from '../../../constants/temperature';
 import { calcTotalPriceBySurcharge } from '../../../utils/kiosk';
+import { CartInfoCreateDto } from '../index';
 
 type SizeType = {
+  id: number;
   surcharge: number;
   name: string;
 };
@@ -23,8 +25,10 @@ interface MenuDetailResponse {
   specificTemperatureOnly: string;
   sizes: SizeType[];
 }
+
 interface MenuDetailProps {
   closeModal: () => void;
+  addCartInfo: (nextCartInfo: CartInfoCreateDto) => void;
   menuId: number | null;
 }
 
@@ -37,7 +41,9 @@ interface SelectedOptionsType {
 const MIN_AMOUNT = 1;
 const MAX_AMOUNT = 10;
 
-function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
+function MenuDetail(props: MenuDetailProps) {
+  const { closeModal, menuId, addCartInfo } = props;
+
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptionsType>({
     amount: 1,
     selectedSize: null,
@@ -47,6 +53,25 @@ function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
     url: `menu/${menuId}`,
     method: 'GET',
   }) as BaseAPI<MenuDetailResponse>;
+
+  if (isLoading) {
+    return (
+      <DetailBox>
+        <Loader />
+      </DetailBox>
+    );
+  }
+
+  if (!data) return <DetailBox />;
+
+  const { thumbnail, name, sizes, specificTemperatureOnly, description, price } = data;
+
+  const { amount, selectedSize, selectedTemperature } = selectedOptions;
+
+  const possibleTemperatures = Object.values(temperature).filter(
+    (temperatureName) =>
+      specificTemperatureOnly === null || temperatureName === specificTemperatureOnly,
+  );
 
   const handleSelectOption = (
     key: keyof SelectedOptionsType,
@@ -72,6 +97,20 @@ function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
     handleSelectOption('amount', amount + val);
   };
 
+  const handleAddMenu = () => {
+    if (!selectedSize || !selectedTemperature) {
+      /**
+       * TODO
+       * 사이즈, 온도를 선택해주세요
+       * Alert 띄우기
+       */
+      return;
+    }
+
+    addCartInfo(createCartInfoData(selectedSize));
+    closeModal();
+  };
+
   const getCurrentTotalPrice = (originPrice: number) => {
     const { selectedSize, amount } = selectedOptions;
     if (!selectedSize) return originPrice * amount;
@@ -85,24 +124,19 @@ function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
     });
   };
 
-  if (isLoading) {
-    return (
-      <DetailBox>
-        <Loader />
-      </DetailBox>
-    );
-  }
-
-  if (!data) return <DetailBox />;
-
-  const { thumbnail, name, sizes, specificTemperatureOnly, description, price } = data;
-
-  const { amount, selectedSize, selectedTemperature } = selectedOptions;
-
-  const possibleTemperatures = Object.values(temperature).filter(
-    (temperatureName) =>
-      specificTemperatureOnly === null || temperatureName === specificTemperatureOnly,
-  );
+  const createCartInfoData = (selectedSize: SizeType): CartInfoCreateDto => {
+    const { amount, selectedTemperature } = selectedOptions;
+    const { id: sizeId, name: sizeName } = selectedSize;
+    return {
+      menuId: menuId as number,
+      menuName: name,
+      total: getCurrentTotalPrice(price),
+      amount,
+      isIce: selectedTemperature === 'ICED',
+      sizeId,
+      sizeName,
+    };
+  };
 
   return (
     <DetailBox>
@@ -129,10 +163,10 @@ function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
         <OptionWrapper>
           <OptionLabel>SIZE</OptionLabel>
           <div>
-            {sizes.map(({ name, surcharge }) => (
+            {sizes.map(({ name, surcharge, id }) => (
               <Button
                 key={name}
-                onClick={() => handleSelectOption('selectedSize', { name, surcharge })}
+                onClick={() => handleSelectOption('selectedSize', { name, surcharge, id })}
                 variant={name === selectedSize?.name ? 'contained' : 'outlined'}
                 color="primary"
                 size="sm"
@@ -165,7 +199,7 @@ function MenuDetail({ closeModal, menuId }: MenuDetailProps) {
         <Button onClick={closeModal} variant="contained" size="md" color="gray02">
           돌아가기
         </Button>
-        <Button variant="contained" size="md" color="primary">
+        <Button onClick={handleAddMenu} variant="contained" size="md" color="primary">
           담기
         </Button>
       </ButtonWrapper>

@@ -25,49 +25,27 @@ export interface CartInfoType {
   isIce: boolean;
 }
 
+export type CartInfoCreateDto = Omit<CartInfoType, 'cartElementId'>;
+
 function KioskManager({ data }: KioskProps) {
   const [selectedCategoryIdx, setselectedCategoryIdx] = useState(0);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isShoppingModalOpen, setIsShoppingModalOpen] = useState(false);
   const [currentShoppingMenuId, setCurrentShoppingMenuId] = useState<number | null>(null);
-  const [cartInfoList, setCartInfoList] = useState<CartInfoType[]>([
-    {
-      cartElementId: 1,
-      menuId: 1,
-      menuName: '크림 아메리카노',
-      sizeId: 1,
-      sizeName: 'Venti',
-      total: 9000,
-      amount: 2,
-      isIce: true,
-    },
-    {
-      cartElementId: 2,
-      menuId: 1,
-      menuName: '과테말라 아야르자',
-      sizeId: 1,
-      sizeName: 'Grande',
-      total: 15000,
-      amount: 10,
-      isIce: false,
-    },
-    {
-      cartElementId: 3,
-      menuId: 1,
-      menuName: '콜롬비아 안티오키아',
-      sizeId: 1,
-      sizeName: 'Tall',
-      total: 267000,
-      amount: 97,
-      isIce: true,
-    },
-  ]);
+  const [cartInfoList, setCartInfoList] = useState<CartInfoType[]>([]);
 
   const getCategories = () =>
     data.map(({ id, name }) => ({
       id,
       name,
     }));
+
+  const showMenuItemIntoGrid = () => {
+    if (!data[selectedCategoryIdx]?.items) return [];
+    return data[selectedCategoryIdx].items.map((menu) => (
+      <MenuItem key={menu.id} menuInfo={menu} onClickMenu={openModalWithSelectedMenu} />
+    ));
+  };
 
   const changeCategoryIdx = (nextCategoryIdx: number) => setselectedCategoryIdx(nextCategoryIdx);
 
@@ -79,6 +57,16 @@ function KioskManager({ data }: KioskProps) {
 
   const clearCartInfoList = () => {
     setCartInfoList([]);
+  };
+
+  const addCardInfo = (newCardInfo: Omit<CartInfoType, 'cartElementId'>) => {
+    setCartInfoList((prevCartInfoList) => [
+      ...prevCartInfoList,
+      {
+        ...newCardInfo,
+        cartElementId: prevCartInfoList.length + 1,
+      },
+    ]);
   };
 
   const closeModal = (type: 'PAYMENT' | 'SHOPPING') => {
@@ -107,11 +95,7 @@ function KioskManager({ data }: KioskProps) {
           changeCategoryIdx={changeCategoryIdx}
         />
         <section>
-          <MenuGrid>
-            {data[selectedCategoryIdx]?.items?.map((menu) => (
-              <MenuItem key={menu.id} menuInfo={menu} onClickMenu={openModalWithSelectedMenu} />
-            )) || []}
-          </MenuGrid>
+          <MenuGrid>{showMenuItemIntoGrid()}</MenuGrid>
           <ShoppingCart
             cartInfoList={cartInfoList}
             clearCartInfoList={clearCartInfoList}
@@ -121,7 +105,11 @@ function KioskManager({ data }: KioskProps) {
       </KioskContent>
 
       <Modal isOpen={isShoppingModalOpen}>
-        <MenuDetail menuId={currentShoppingMenuId} closeModal={closeModal('SHOPPING')} />
+        <MenuDetail
+          menuId={currentShoppingMenuId}
+          closeModal={closeModal('SHOPPING')}
+          addCartInfo={addCardInfo}
+        />
       </Modal>
       <Modal isOpen={isPaymentModalOpen}>
         <PaymentManager
