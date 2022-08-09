@@ -124,19 +124,20 @@ const KioskContainer = styled.main`
   flex-direction: column;
   align-items: center;
   & > header {
-    padding: 20px 0;
+    padding: 10px 0;
   }
 `;
 
 const KioskContent = styled.section`
   width: 100%;
-  padding: 35px 183px;
+  padding: 20px 160px;
+  padding-bottom: 0;
 
   & > section {
     width: 100%;
     display: flex;
 
-    margin-top: 57px;
+    margin-top: 36px;
   }
 `;
 

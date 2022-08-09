@@ -18,7 +18,7 @@ const SIZE_MAP = {
   md: css`
     font-size: 25px;
     font-weight: 700;
-    padding: 22px 45px;
+    padding: 22px 35px;
   `,
   sm: css`
     font-size: 16px;
