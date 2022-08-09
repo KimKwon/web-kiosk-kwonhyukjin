@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { MenuType } from '../../App';
+import { MenuType } from '../../../App';
 import MenuItem from './MenuItem';
 
 interface MenuGridProps {

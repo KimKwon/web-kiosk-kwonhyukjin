@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { CategorizedMenu } from '../../App';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import CategoryTab from './CategoryTab';
-import MenuGrid from './MenuGrid';
-import ShoppingCart from './ShoppingCart';
+import MenuGrid from './KioskMenu/MenuGrid';
+import ShoppingCart from './KioskCart/ShoppingCart';
 interface KioskProps {
   data: CategorizedMenu[];
 }

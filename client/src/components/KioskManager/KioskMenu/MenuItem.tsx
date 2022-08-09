@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { MenuType } from '../../App';
-import mixin from '../../cores/styles/mixin';
+import { MenuType } from '../../../App';
+import mixin from '../../../cores/styles/mixin';
 
 function MenuItem({ menuInfo }: { menuInfo: Pick<MenuType, 'name' | 'price' | 'thumbnail'> }) {
   const { name, price, thumbnail } = menuInfo;
