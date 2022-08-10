@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/entities/Category';
 import { Item } from 'src/entities/Item';
 import { SalesDetail } from 'src/entities/SalesDetail';
-import { MoreThan, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class MenuService {
@@ -20,8 +20,9 @@ export class MenuService {
   async findPopularMenuIdWithLimit(limit: number) {
     const groupBySumOfAmount = await this.salesDetailRepository
       .createQueryBuilder('sd')
-      .select(['SUM(amount) as amount', 'item_id as itemId'])
+      .select(['SUM(amount) as sumAmount', 'item_id as itemId'])
       .groupBy('item_id')
+      .orderBy('sumAmount', 'DESC')
       .limit(limit)
       .execute();
 
@@ -32,12 +33,11 @@ export class MenuService {
       [],
     );
 
-    await this.menuRepository.update(
-      { rank: MoreThan(0) },
-      {
-        rank: null,
-      },
-    );
+    await this.menuRepository
+      .createQueryBuilder()
+      .update({ rank: null })
+      .where('rank > 0')
+      .execute();
 
     const updatePromises = popularMenuIds.map((id, index) =>
       this.menuRepository.update(id, {

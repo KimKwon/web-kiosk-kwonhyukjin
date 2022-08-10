@@ -1,19 +1,21 @@
 import {
   IsNumber,
-  IsString,
   IsBoolean,
   IsDecimal,
   IsNotEmpty,
+  IsOptional,
 } from 'class-validator';
 
 export class CreateEmptySalesDto {
-  @IsString()
+  @IsNumber()
   readonly paymentMethodId: number;
 
   @IsNumber()
+  @IsOptional()
   readonly givenPrice?: number;
 
   @IsNumber()
+  @IsOptional()
   readonly totalAmount?: number;
 }
 
@@ -35,10 +37,11 @@ export class ItemInSalesDto {
 }
 
 export class CreateSalesDto {
-  @IsString()
-  readonly paymentMethod: 'CASH' | 'CARD';
+  @IsNumber()
+  readonly paymentMethodId: number;
 
-  @IsDecimal()
+  @IsNumber()
+  @IsOptional()
   readonly givenPrice?: number;
 
   @IsNotEmpty()

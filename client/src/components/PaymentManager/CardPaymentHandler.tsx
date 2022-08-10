@@ -8,14 +8,14 @@ const CART_LATENCY_RANGE = {
   end: 7,
 };
 
-function CardPaymentHandler({ endPayment }: PaymentHandlerProps) {
+function CardPaymentHandler({ requestPayment }: PaymentHandlerProps) {
   const [isPaymentOngoing, setIsPaymentOngoing] = useState(true);
 
   useEffect(() => {
     const randomLatency = getRandomNumber(CART_LATENCY_RANGE);
 
     setTimeout(() => {
-      endPayment();
+      requestPayment();
       setIsPaymentOngoing(false);
     }, randomLatency * 1000);
   }, []);

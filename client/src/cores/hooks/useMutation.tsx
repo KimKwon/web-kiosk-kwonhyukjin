@@ -1,39 +1,20 @@
-import { default as axios, Method, AxiosRequestHeaders } from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import axios, { AxiosRequestConfig } from 'axios';
+import { useState } from 'react';
 import { remote } from '../libs/api';
-
-interface APIConfig<RequestData> {
-  url: string;
-  method?: Method;
-  headers?: AxiosRequestHeaders;
-  data?: RequestData;
-}
 
 interface APIError {
   message?: string;
   code?: number;
 }
 
-export interface BaseAPI<Response> {
-  data?: Response;
-  isLoading: boolean;
-  refetch: () => void;
-  error?: APIError;
-}
-
-function useAPI<RequestData = Record<string, never>>(config: APIConfig<RequestData>) {
-  const [response, setResponse] = useState();
+function useMutation<ResponseType>(config: AxiosRequestConfig) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<APIError>();
-  const [shouldRefetch, setShouldRefetch] = useState(0);
 
-  const refetch = useCallback(() => setShouldRefetch((updateCount) => updateCount + 1), []);
-
-  const fetchFn = async () => {
+  const mutate = async <RequestType,>(data: RequestType): Promise<ResponseType | null> => {
     try {
       setIsLoading(true);
-      const result = await remote.request(config);
-      setResponse(result?.data);
+      const result = await remote.request<ResponseType>({ ...config, data });
 
       return result?.data;
     } catch (error) {
@@ -58,7 +39,7 @@ function useAPI<RequestData = Record<string, never>>(config: APIConfig<RequestDa
           message: error.response?.statusText,
         });
 
-        return;
+        return null;
       }
 
       throw error;
@@ -67,12 +48,7 @@ function useAPI<RequestData = Record<string, never>>(config: APIConfig<RequestDa
     }
   };
 
-  useEffect(() => {
-    fetchFn();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldRefetch]);
-
-  return { data: response, isLoading, error, refetch };
+  return { mutate, isLoading, error };
 }
 
-export default useAPI;
+export default useMutation;
