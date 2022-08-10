@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Baedalyee } from '../../assets/logo-big.svg';
 
-function Loader() {
+function Loader({ loadingText = '달려가는 중' }: { loadingText?: string }) {
   const [dots, setDots] = useState('');
 
   useEffect(() => {
@@ -23,7 +23,9 @@ function Loader() {
   return (
     <>
       <LoaderBox>
-        <LoadingText>달려가는 중 {dots}</LoadingText>
+        <LoadingText>
+          {loadingText} {dots}
+        </LoadingText>
         <Baedalyee />
       </LoaderBox>
     </>

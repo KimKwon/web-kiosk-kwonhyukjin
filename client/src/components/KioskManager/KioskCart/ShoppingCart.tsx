@@ -8,10 +8,11 @@ interface ShoppingCartProps {
   cartInfoList: CartInfoType[];
   removeFromCartInfoList: (cartElementId: number) => void;
   clearCartInfoList: () => void;
+  openPaymentModal: () => void;
 }
 
 function ShoppingCart(props: ShoppingCartProps) {
-  const { cartInfoList, removeFromCartInfoList, clearCartInfoList } = props;
+  const { cartInfoList, removeFromCartInfoList, clearCartInfoList, openPaymentModal } = props;
 
   const isCartEmpty = cartInfoList.length === 0;
 
@@ -26,9 +27,7 @@ function ShoppingCart(props: ShoppingCartProps) {
       return;
     }
 
-    /**
-     * 결제모달을 핸들링하는 로직 배치
-     */
+    openPaymentModal();
   };
 
   return (

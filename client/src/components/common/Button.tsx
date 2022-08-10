@@ -82,6 +82,7 @@ const StButton = styled.button<StyledButtonProps>`
 
   display: flex;
   justify-content: ${({ isAnyIcon }) => (isAnyIcon ? 'space-between' : 'center')};
+  gap: 30px;
   align-items: center;
 
   border-radius: 15px;

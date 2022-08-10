@@ -11,3 +11,7 @@ export const calcTotalPriceBySurcharge = ({
   originPrice: number;
   surcharge: number;
 }) => (originPrice + surcharge) * amount;
+
+export const getRandomNumber = ({ end, start = 0 }: { end: number; start?: number }) => {
+  return Math.floor(Math.random() * (end - start + 1) + start);
+};
