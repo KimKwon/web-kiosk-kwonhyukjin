@@ -29,18 +29,8 @@ export class SalesService {
     return this.salesDetailRepository.create(createSalesDetailDto);
   }
 
-  private async findPaymentMethodId(methodName: PaymentMethod['name']) {
-    const targetMethod = await this.paymentMethodRepository.findOneBy({
-      name: methodName,
-    });
-
-    return targetMethod.id;
-  }
-
   async create(createSalesDto: CreateSalesDto) {
-    const { paymentMethod, givenPrice, itemList } = createSalesDto;
-
-    const paymentMethodId = await this.findPaymentMethodId(paymentMethod);
+    const { paymentMethodId, givenPrice, itemList } = createSalesDto;
 
     const createdSales = this.createSales({
       paymentMethodId,
