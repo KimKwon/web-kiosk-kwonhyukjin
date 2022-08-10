@@ -87,6 +87,10 @@ function KioskManager({ data }: KioskProps) {
     setIsShoppingModalOpen(true);
   };
 
+  const openPaymentModal = () => {
+    setIsPaymentModalOpen(true);
+  };
+
   return (
     <KioskContainer>
       <header>
@@ -102,6 +106,7 @@ function KioskManager({ data }: KioskProps) {
         <section>
           <MenuGrid>{showMenuItemIntoGrid()}</MenuGrid>
           <ShoppingCart
+            openPaymentModal={openPaymentModal}
             cartInfoList={cartInfoList}
             clearCartInfoList={clearCartInfoList}
             removeFromCartInfoList={removeFromCartInfoList}
@@ -120,7 +125,7 @@ function KioskManager({ data }: KioskProps) {
         <PaymentManager
           cartInfoList={cartInfoList}
           closeButton={
-            <button onClick={closeModal('PAYMENT')}>
+            <button className="payment-cancel-button" onClick={closeModal('PAYMENT')}>
               <XCircle />
             </button>
           }

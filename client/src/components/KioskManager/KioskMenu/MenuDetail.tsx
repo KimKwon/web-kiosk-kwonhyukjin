@@ -212,7 +212,6 @@ function MenuDetail(props: MenuDetailProps) {
 }
 
 const DetailBox = styled(ColumnWrapper)`
-  position: relative;
   width: 590px;
   height: 660px;
 
