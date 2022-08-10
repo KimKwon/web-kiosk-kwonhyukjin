@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/entities/Category';
 import { Item } from 'src/entities/Item';
 import { SalesDetail } from 'src/entities/SalesDetail';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 
 @Injectable()
 export class MenuService {
@@ -30,6 +30,13 @@ export class MenuService {
     const popularMenuIds = groupBySumOfAmount.reduce(
       (acc, { itemId }) => [...acc, itemId],
       [],
+    );
+
+    await this.menuRepository.update(
+      { rank: MoreThan(0) },
+      {
+        rank: null,
+      },
     );
 
     const updatePromises = popularMenuIds.map((id, index) =>
