@@ -17,6 +17,9 @@ export class Item {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
+  @Column('int', { name: 'rank', nullable: true })
+  rank: number | null;
+
   @Column('varchar', { name: 'name', nullable: true, length: 45 })
   name: string | null;
 
