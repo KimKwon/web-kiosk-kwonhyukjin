@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import { MenuType } from '../../../App';
 import mixin from '../../../cores/styles/mixin';
 
-import { ReactComponent as FirstMedal } from '../../../assets/icons/first-medal.svg';
-import { ReactComponent as SecondMedal } from '../../../assets/icons/second-medal.svg';
-import { ReactComponent as ThirdMedal } from '../../../assets/icons/third-medal.svg';
+import { ReactComponent as FirstMedal } from '../../../assets/icons/medal/first-medal.svg';
+import { ReactComponent as SecondMedal } from '../../../assets/icons/medal/second-medal.svg';
+import { ReactComponent as ThirdMedal } from '../../../assets/icons/medal/third-medal.svg';
 
 const RANK_MEDAL = [FirstMedal, SecondMedal, ThirdMedal];
 
