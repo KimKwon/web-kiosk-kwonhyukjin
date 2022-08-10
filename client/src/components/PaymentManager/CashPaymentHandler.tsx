@@ -21,10 +21,15 @@ const CASH_METHODS = [
 ];
 
 function CashPaymentHandler(props: PaymentHandlerProps) {
-  const { endPayment, totalPrice } = props;
+  const { requestPayment, totalPrice } = props;
   const [givenPrice, setGivenPrice] = useState(0);
 
   const hasEnoughCashToPayment = givenPrice >= totalPrice;
+
+  const handleRequestPayment = () => {
+    if (!hasEnoughCashToPayment) return;
+    requestPayment(givenPrice);
+  };
 
   const handleInsertCash = (currentInsertCash: number) => {
     if (hasEnoughCashToPayment) {
@@ -59,7 +64,10 @@ function CashPaymentHandler(props: PaymentHandlerProps) {
           <p>투입금액</p>
           <span className="given-price">{parseNumberToMoneyType(givenPrice)}</span>
         </PriceLabelBox>
-        <RequestPaymentButton onClick={endPayment} isPaymentAvailable={hasEnoughCashToPayment}>
+        <RequestPaymentButton
+          onClick={handleRequestPayment}
+          isPaymentAvailable={hasEnoughCashToPayment}
+        >
           <span>결제하러가기</span>
           <Dokgo />
         </RequestPaymentButton>
