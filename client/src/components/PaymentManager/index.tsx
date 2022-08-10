@@ -7,12 +7,23 @@ import { ReactComponent as CashMethod } from '../../assets/icons/10000.svg';
 import CardPaymentHandler from './CardPaymentHandler';
 import CashPaymentHandler from './CashPaymentHandler';
 import Button from '../common/Button';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ColumnWrapper } from '../common/Wrapper';
+import Receipt from './Receipt';
 
 interface PaymentManagerProps {
   closeButton: JSX.Element;
   cartInfoList: CartInfoType[];
+}
+
+interface PaymentInfo {
+  selectedMethodId?: number;
+  givenPrice?: number;
+}
+
+export interface PaymentHandlerProps {
+  totalPrice: number;
+  endPayment: () => void;
 }
 
 const paymentMethodAdaptor = [
@@ -30,15 +41,33 @@ const paymentMethodAdaptor = [
   },
 ];
 
-function PaymentManager({ closeButton }: PaymentManagerProps) {
-  const [CurrentHandler, setCurrentHandler] = useState<React.FunctionComponent>();
+function PaymentManager({ closeButton, cartInfoList }: PaymentManagerProps) {
+  const [isPaymentEnd, setIsPaymentEnd] = useState(false);
+  const [currentPaymentInfo, setCurrentPaymentInfo] = useState<PaymentInfo>({});
+  const [CurrentHandler, setCurrentHandler] =
+    useState<React.FunctionComponent<PaymentHandlerProps>>();
+
+  const totalPrice = useMemo(
+    () => cartInfoList.reduce((acc, { total }) => acc + total, 0),
+    [cartInfoList],
+  );
+
+  const endPayment = () => {
+    setIsPaymentEnd(true);
+  };
 
   const showPaymentMethods = () => (
     <ButtonWrapper>
       {paymentMethodAdaptor.map(({ methodId, methodName, methodIcon, paymentHandler }) => (
         <Button
           key={methodId}
-          onClick={() => setCurrentHandler(() => paymentHandler)}
+          onClick={() => {
+            setCurrentHandler(() => paymentHandler);
+            setCurrentPaymentInfo((prevPaymentInfo) => ({
+              ...prevPaymentInfo,
+              selectedMethodId: methodId,
+            }));
+          }}
           variant="contained"
           color="primary"
           size="lg"
@@ -50,10 +79,28 @@ function PaymentManager({ closeButton }: PaymentManagerProps) {
     </ButtonWrapper>
   );
 
+  const showReceipt = () => {
+    const { selectedMethodId, givenPrice } = currentPaymentInfo;
+    if (selectedMethodId === undefined) return null;
+
+    return <Receipt receiptInfo={{ selectedMethodId, givenPrice, totalPrice }} />;
+  };
+
   return (
     <PaymentManagerBox>
-      {CurrentHandler ? <CurrentHandler /> : showPaymentMethods()}
-      {closeButton}
+      <>
+        {isPaymentEnd && showReceipt()}
+        {!isPaymentEnd && (
+          <>
+            {CurrentHandler ? (
+              <CurrentHandler endPayment={endPayment} totalPrice={totalPrice} />
+            ) : (
+              showPaymentMethods()
+            )}
+            {closeButton}
+          </>
+        )}
+      </>
     </PaymentManagerBox>
   );
 }
