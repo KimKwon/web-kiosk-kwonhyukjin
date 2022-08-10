@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { CartInfoType } from '..';
 import mixin from '../../../cores/styles/mixin';
 import { getTemperature } from '../../../utils/kiosk';
+import { parseNumberToMoneyType } from '../../../utils/parse';
 
 interface CartElementProps {
   cartInfo: CartInfoType;
@@ -18,14 +19,14 @@ function CartElement(props: CartElementProps) {
         <span className="element-temperature">{getTemperature(isIce)}</span>
         <span className="element-size">{sizeName}</span>
         <span className="element-amount">{amount}</span>
-        <span className="element-total">{total.toLocaleString()}</span>
+        <span className="element-total">{parseNumberToMoneyType(total)}</span>
       </OptionWrapper>
       <RemoveButton onClick={() => removeFromCartInfoList(cartElementId)}>삭제</RemoveButton>
     </ElementBox>
   );
 }
 
-const ElementBox = styled.li`
+export const ElementBox = styled.li`
   width: 100%;
 
   display: flex;
@@ -40,7 +41,7 @@ const ElementBox = styled.li`
   list-style: none;
 `;
 
-const OptionWrapper = styled.div`
+export const OptionWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
