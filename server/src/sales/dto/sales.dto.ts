@@ -1,13 +1,21 @@
-import { IsNumber, IsBoolean, IsDecimal, IsNotEmpty } from 'class-validator';
+import {
+  IsNumber,
+  IsBoolean,
+  IsDecimal,
+  IsNotEmpty,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateEmptySalesDto {
   @IsNumber()
   readonly paymentMethodId: number;
 
   @IsNumber()
+  @IsOptional()
   readonly givenPrice?: number;
 
   @IsNumber()
+  @IsOptional()
   readonly totalAmount?: number;
 }
 
@@ -33,6 +41,7 @@ export class CreateSalesDto {
   readonly paymentMethodId: number;
 
   @IsNumber()
+  @IsOptional()
   readonly givenPrice?: number;
 
   @IsNotEmpty()
