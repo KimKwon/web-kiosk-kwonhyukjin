@@ -7,8 +7,10 @@ interface ReceiptProps {
 }
 
 function Receipt(props: ReceiptProps) {
-  const { selectedMethodId, totalPrice, givenPrice } = props.receiptInfo;
-  return <div>{`${selectedMethodId}로 ${givenPrice}받아서 ${totalPrice}결제완료`}</div>;
+  const { selectedMethodId, totalPrice } = props.receiptInfo;
+  return (
+    <div>{`${selectedMethodId}번 결제수단으로 ${totalPrice.toLocaleString()}원 결제완료`}</div>
+  );
 }
 
 export default Receipt;
