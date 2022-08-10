@@ -88,19 +88,17 @@ function PaymentManager({ closeButton, cartInfoList }: PaymentManagerProps) {
 
   return (
     <PaymentManagerBox>
-      <>
-        {isPaymentEnd && showReceipt()}
-        {!isPaymentEnd && (
-          <>
-            {CurrentHandler ? (
-              <CurrentHandler endPayment={endPayment} totalPrice={totalPrice} />
-            ) : (
-              showPaymentMethods()
-            )}
-            {closeButton}
-          </>
-        )}
-      </>
+      {isPaymentEnd && showReceipt()}
+      {!isPaymentEnd && (
+        <>
+          {CurrentHandler ? (
+            <CurrentHandler endPayment={endPayment} totalPrice={totalPrice} />
+          ) : (
+            showPaymentMethods()
+          )}
+          {closeButton}
+        </>
+      )}
     </PaymentManagerBox>
   );
 }
