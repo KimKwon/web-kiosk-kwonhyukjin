@@ -125,7 +125,11 @@ export class SalesService {
     if (targetDetails.length === 0)
       throw new HttpException('Invalid Sales', 409);
 
-    return { orderNumber: orderNumber + 1, ...targetSales[0], itemList: targetDetails };
+    return {
+      orderNumber: orderNumber + 1,
+      ...targetSales[0],
+      itemList: targetDetails,
+    };
   }
 
   async findAllSales(salesQb: SelectQueryBuilder<Sales>) {

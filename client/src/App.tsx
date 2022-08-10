@@ -10,6 +10,7 @@ export interface MenuType {
   description: string;
   thumbnail: string;
   specificTemperatureOnly: 'HOT' | 'ICED' | null;
+  rank: number | null;
 }
 
 export interface CategorizedMenu {
