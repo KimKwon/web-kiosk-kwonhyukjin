@@ -2,23 +2,38 @@ import styled from 'styled-components';
 import { MenuType } from '../../../App';
 import mixin from '../../../cores/styles/mixin';
 
+import { ReactComponent as FirstMedal } from '../../../assets/icons/first-medal.svg';
+import { ReactComponent as SecondMedal } from '../../../assets/icons/second-medal.svg';
+import { ReactComponent as ThirdMedal } from '../../../assets/icons/third-medal.svg';
+
+const RANK_MEDAL = [FirstMedal, SecondMedal, ThirdMedal];
+
 interface MenuItemInterface {
   onClickMenu: (menuId: number) => void;
-  menuInfo: Pick<MenuType, 'name' | 'price' | 'thumbnail' | 'id'>;
+  menuInfo: Pick<MenuType, 'name' | 'price' | 'thumbnail' | 'id' | 'rank'>;
 }
 
 function MenuItem({ menuInfo, onClickMenu }: MenuItemInterface) {
-  const { name, price, thumbnail, id } = menuInfo;
+  const { name, price, thumbnail, id, rank } = menuInfo;
+
+  const isValidRank = rank && rank > 0 && rank <= 3;
+
+  const Medal = isValidRank && RANK_MEDAL[rank - 1];
+
   return (
     <MenuBox onClick={() => onClickMenu(id)}>
-      <img src={thumbnail} alt="menu-thumbnail" />
-      <p className="menu-name">{name}</p>
-      <p className="menu-price">{price.toLocaleString()}</p>
+      <>
+        {Medal && <Medal />}
+        <img src={thumbnail} alt="menu-thumbnail" />
+        <p className="menu-name">{name}</p>
+        <p className="menu-price">{price.toLocaleString()}</p>
+      </>
     </MenuBox>
   );
 }
 
 const MenuBox = styled.article`
+  position: relative;
   width: 198px;
   max-height: 276px;
 
@@ -31,6 +46,12 @@ const MenuBox = styled.article`
   box-shadow: 2px 3px 3px 3px rgba(0, 0, 0, 0.25);
 
   padding: 22px 35px;
+
+  & > svg {
+    position: absolute;
+    top: 0;
+    left: 7px;
+  }
 
   & > img {
     width: 100%;
