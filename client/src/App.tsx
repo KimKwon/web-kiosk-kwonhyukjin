@@ -4,6 +4,7 @@ import IdleKioskScreen from './components/IdleKioskScreen';
 import KioskManager from './components/KioskManager';
 import useAPI, { BaseAPI } from './cores/hooks/useAPI';
 import useKioskStatus, { KioskStatus } from './cores/hooks/useKioksStatus';
+import useToast from './cores/hooks/useToast';
 
 export interface MenuType {
   id: number;
@@ -38,6 +39,7 @@ function App() {
   }) as BaseAPI<CategorizedMenu[]>;
 
   const { kioskStatus } = useKioskStatus();
+  const { isToastOpen, renderToast } = useToast();
 
   const screenHandler = () => {
     switch (kioskStatus) {
@@ -52,7 +54,12 @@ function App() {
     }
   };
 
-  return screenHandler();
+  return (
+    <>
+      {screenHandler()}
+      {isToastOpen && renderToast()}
+    </>
+  );
 }
 
 export default ErrorCapturingApp;
