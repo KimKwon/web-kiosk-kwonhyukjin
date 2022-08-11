@@ -1,10 +1,12 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import mixin from '../../../cores/styles/mixin';
 import Button from '../../common/Button';
+import { ColumnWrapper } from '../../common/Wrapper';
 import { CartInfoType } from '../index';
 import CartElement from './CartElement';
 
 interface ShoppingCartProps {
+  resetTimeout: number;
   cartInfoList: CartInfoType[];
   removeFromCartInfoList: (cartElementId: number) => void;
   clearCartInfoList: () => void;
@@ -12,7 +14,13 @@ interface ShoppingCartProps {
 }
 
 function ShoppingCart(props: ShoppingCartProps) {
-  const { cartInfoList, removeFromCartInfoList, clearCartInfoList, openPaymentModal } = props;
+  const {
+    resetTimeout,
+    cartInfoList,
+    removeFromCartInfoList,
+    clearCartInfoList,
+    openPaymentModal,
+  } = props;
 
   const isCartEmpty = cartInfoList.length === 0;
 
@@ -42,7 +50,14 @@ function ShoppingCart(props: ShoppingCartProps) {
 
       <CartButtonWrapper>
         <Button onClick={clearCartInfoList} variant="contained" size="md" color="gray02">
-          전체 취소
+          <ColumnWrapper>
+            {!isCartEmpty && (
+              <TimerWarnText shouldBlink={resetTimeout % 2 === 1}>
+                {resetTimeout}초 남음
+              </TimerWarnText>
+            )}
+            <span>전체 취소</span>
+          </ColumnWrapper>
         </Button>
         <Button onClick={handlePayment} variant="contained" size="md" color="primary">
           <PaymentButtonInnerText>
@@ -94,6 +109,34 @@ const PaymentButtonInnerText = styled.div`
     font-size: 20px;
     font-weight: 600;
     ${mixin.concatWonUnit}
+  }
+`;
+
+const TimerWarnText = styled.p<{ shouldBlink: boolean }>`
+  ${({ theme, shouldBlink }) =>
+    shouldBlink
+      ? css`
+          color: ${theme.colors.yellow};
+          font-size: 0.8em;
+          animation: shakeHard ease infinite 0.5s;
+        `
+      : css`
+          font-size: 0.8em;
+          color: inherit;
+        `};
+
+  @keyframes shakeHard {
+    0% {
+      transform: rotate(-5deg);
+    }
+
+    50% {
+      transform: translateY(-10px) rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(5deg);
+    }
   }
 `;
 

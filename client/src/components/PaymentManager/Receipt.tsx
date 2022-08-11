@@ -6,8 +6,9 @@ import Loader from '../common/Loader';
 import { ColumnWrapper } from '../common/Wrapper';
 import { ElementBox, OptionWrapper } from '../KioskManager/KioskCart/CartElement';
 import { ReactComponent as Dokgo } from '../../assets/dokgo-baedal.svg';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { changeKioskStatus } from '../../cores/hooks/useKioksStatus';
+import useTimer from '../../cores/hooks/useTimer';
 interface ReceiptProps {
   receiptId: number;
 }
@@ -33,31 +34,18 @@ interface ReceiptResponse {
 const TIME_LIMIT = 5;
 
 function Receipt({ receiptId }: ReceiptProps) {
-  const [willBeClosedAt, setWillBeClosedAt] = useState(TIME_LIMIT);
-  const remainingTime = useRef(TIME_LIMIT);
   const { data, isLoading, error } = useAPI({
     url: `/sales/${receiptId}`,
     method: 'GET',
   }) as BaseAPI<ReceiptResponse>;
 
+  const { remainTime, invoke, clear } = useTimer(TIME_LIMIT);
+
   useEffect(() => {
-    let timerId: NodeJS.Timer | undefined;
+    invoke(() => changeKioskStatus('IDLE'));
 
-    if (data) {
-      timerId = setInterval(() => {
-        setWillBeClosedAt((currentLeftTime) => currentLeftTime - 1);
-
-        if (--remainingTime.current === 0) {
-          clearInterval(timerId);
-          changeKioskStatus('IDLE');
-        }
-      }, 1000);
-    }
-
-    return () => {
-      if (timerId) clearInterval(timerId);
-    };
-  }, [data]);
+    return clear;
+  }, []);
 
   if (isLoading)
     return (
@@ -102,7 +90,7 @@ function Receipt({ receiptId }: ReceiptProps) {
       </ReturnLabel>
       <Dokgo className="dokgo" />
       <TimerText>
-        <em>{willBeClosedAt}초</em> 뒤에 자동으로 닫혀요.
+        <em>{remainTime}초</em> 뒤에 자동으로 닫혀요.
       </TimerText>
     </ReceiptBox>
   );

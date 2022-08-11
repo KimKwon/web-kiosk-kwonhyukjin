@@ -7,6 +7,7 @@ const colors = {
   gray03: '#f4f4f4',
   background: '#ededed',
   background02: '#f8f8f8',
+  yellow: '#fff61f',
 } as const;
 
 export type ColorType = typeof colors;
