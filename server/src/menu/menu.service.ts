@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/entities/Category';
 import { Item } from 'src/entities/Item';
@@ -55,12 +55,16 @@ export class MenuService {
     });
   }
 
-  findOne(id: number): Promise<Item> {
-    return this.menuRepository.findOne({
+  async findOne(id: number): Promise<Item> {
+    const result = await this.menuRepository.findOne({
       relations: ['sizes'],
       where: {
         id,
       },
     });
+
+    if (!result) throw new HttpException('Invalid Menu Id', 404);
+
+    return result;
   }
 }
