@@ -17,8 +17,9 @@
   <br />
   <span>⭐️ </span>
   <a href="http://3.38.168.57/">데모 보러가기</a>
-  (준비중)
   <br />
+  <span>:pen: </span>
+  <a href="https://github.com/woowa-techcamp-2022/web-kiosk-kwonhyukjin/wiki">위키 보러가기</a>
 </div>
 
 
@@ -35,3 +36,37 @@
 ![mySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
 ![node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 ![NestJS](https://img.shields.io/badge/NestJS-%2320232a.svg?style=for-the-badge&logo=NestJS&logoColor=%23E0234E)
+
+
+---
+
+## 어떻게 시작하나요?
+
+1. Clone Repository
+
+`$ git clone https://github.com/woowa-techcamp-2022/web-kiosk-kwonhyukjin.git`
+
+2. Install Dependency
+
+`$ cd web-kiosk-kwonhyukjin`
+`$ cd client`
+`$ npm run prebuild`
+
+3. Set Environment Variable with mySQL
+
+> .env.development
+```
+HOST=127.0.0.1
+DATABASE_NAME=kioskdb
+PORT=3306
+USERNAME=
+PASSWORD=
+```
+
+4. Done
+
+`$ cd client && npm run start`
+`$ cd server && npm run start:dev`
+
+
+---
