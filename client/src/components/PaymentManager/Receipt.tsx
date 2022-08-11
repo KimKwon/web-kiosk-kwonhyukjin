@@ -34,7 +34,7 @@ interface ReceiptResponse {
 const TIME_LIMIT = 5;
 
 function Receipt({ receiptId }: ReceiptProps) {
-  const { data, isLoading, error } = useAPI({
+  const { data, isLoading } = useAPI({
     url: `/sales/${receiptId}`,
     method: 'GET',
   }) as BaseAPI<ReceiptResponse>;
@@ -54,7 +54,7 @@ function Receipt({ receiptId }: ReceiptProps) {
       </ReceiptBox>
     );
 
-  if (!data || error) return <ReceiptBox />;
+  if (!data) return <ReceiptBox />;
 
   const { orderNumber, givenPrice, totalAmount, paymentMethodName, itemList } = data;
 
