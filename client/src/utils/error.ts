@@ -14,8 +14,6 @@ export const isKnownError = (
 
   const STATUS_CODE = error.response.status;
 
-  console.log(STATUS_CODE);
-
   if (STATUS_CODE in ERROR_MSG) {
     return true;
   }
