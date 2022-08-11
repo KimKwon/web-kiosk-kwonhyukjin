@@ -64,11 +64,47 @@ function KioskManager({ data }: KioskProps) {
     setCartInfoList([]);
   };
 
-  const addCardInfo = (newCardInfo: Omit<CartInfoType, 'cartElementId'>) => {
+  const findCartInfoId = (targetCartInfo: CartInfoCreateDto) => {
+    const { menuId: targetMenuId, sizeId: targetSizeId, isIce: targetIsIce } = targetCartInfo;
+    return cartInfoList.find(
+      ({ menuId, sizeId, isIce }) =>
+        targetMenuId === menuId && targetSizeId === sizeId && targetIsIce === isIce,
+    )?.cartElementId;
+  };
+
+  const updateCartInfo = (
+    targetCartInfoId: number,
+    updateInfo: Pick<CartInfoCreateDto, 'total' | 'amount'>,
+  ) => {
+    const copiedCartInfoList = [...cartInfoList];
+    const targetCartInfo = copiedCartInfoList.find(
+      ({ cartElementId }) => targetCartInfoId === cartElementId,
+    );
+
+    if (!targetCartInfo) return;
+
+    const { total, amount } = updateInfo;
+
+    targetCartInfo.amount += amount;
+    targetCartInfo.total += total;
+
+    setCartInfoList(copiedCartInfoList);
+  };
+
+  const addCartInfo = (newCartInfo: CartInfoCreateDto) => {
+    const existCartInfoId = findCartInfoId(newCartInfo);
+    const isCartInfoAlreadyExist = existCartInfoId !== undefined;
+
+    if (isCartInfoAlreadyExist) {
+      const { amount, total } = newCartInfo;
+      updateCartInfo(existCartInfoId, { amount, total });
+      return;
+    }
+
     setCartInfoList((prevCartInfoList) => [
       ...prevCartInfoList,
       {
-        ...newCardInfo,
+        ...newCartInfo,
         cartElementId: prevCartInfoList.length + 1,
       },
     ]);
@@ -118,7 +154,7 @@ function KioskManager({ data }: KioskProps) {
         <MenuDetail
           menuId={currentShoppingMenuId}
           closeModal={closeModal('SHOPPING')}
-          addCartInfo={addCardInfo}
+          addCartInfo={addCartInfo}
         />
       </Modal>
       <Modal isOpen={isPaymentModalOpen}>
