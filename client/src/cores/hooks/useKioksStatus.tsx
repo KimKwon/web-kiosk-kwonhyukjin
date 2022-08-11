@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 
-type KioskStatus = 'IDLE' | 'SHOPPING';
+export const KioskStatus = {
+  IDLE: 'IDLE',
+  SHOPPING: 'SHOPPING',
+} as const;
 
-export const changeKioskStatus = (nextKioskStatus: KioskStatus) => {
+type KioskStatusType = keyof typeof KioskStatus;
+
+export const changeKioskStatus = (nextKioskStatus: KioskStatusType) => {
   const kioskStatusChangeEvent = new CustomEvent('kioskstatuschange', {
     detail: {
       nextKioskStatus,
@@ -13,7 +18,7 @@ export const changeKioskStatus = (nextKioskStatus: KioskStatus) => {
 };
 
 function useKioskStatus() {
-  const [kioskStatus, setKioskStatus] = useState<KioskStatus>('IDLE');
+  const [kioskStatus, setKioskStatus] = useState<KioskStatusType>(KioskStatus.IDLE);
 
   useEffect(() => {
     function handleKioskChange(e: Event) {

@@ -1,10 +1,10 @@
-import { changeKioskStatus } from '../../cores/hooks/useKioksStatus';
+import { changeKioskStatus, KioskStatus } from '../../cores/hooks/useKioksStatus';
 import Button from '../common/Button';
 
 function IdleKioskScreen({ isMenuReady }: { isMenuReady: boolean }) {
   const moveToKioskMain = () => {
     if (!isMenuReady) return;
-    changeKioskStatus('SHOPPING');
+    changeKioskStatus(KioskStatus.SHOPPING);
   };
 
   return (
