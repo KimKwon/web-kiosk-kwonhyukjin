@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import styled from 'styled-components';
+import { useEffect, useRef, useState } from 'react';
+import styled, { css } from 'styled-components';
 import useAPI, { BaseAPI } from '../../../cores/hooks/useAPI';
 
 import { ColumnWrapper, FlexWrapper } from '../../common/Wrapper';
@@ -47,7 +47,8 @@ const MAX_AMOUNT = 10;
 
 function MenuDetail(props: MenuDetailProps) {
   const { closeModal, menuId, addCartInfo } = props;
-
+  const detailBoxRef = useRef<HTMLDivElement>(null);
+  const [isMenuWillBeAdded, setIsMenuWillBeAdded] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptionsType>({
     amount: 1,
     selectedSize: null,
@@ -57,6 +58,12 @@ function MenuDetail(props: MenuDetailProps) {
     url: `menu/${menuId}`,
     method: 'GET',
   }) as BaseAPI<MenuDetailResponse>;
+
+  useEffect(() => {
+    if (isMenuWillBeAdded) {
+      detailBoxRef.current?.addEventListener('animationend', addToCartWithSelfClosing);
+    }
+  }, [isMenuWillBeAdded]);
 
   if (isLoading) {
     return (
@@ -76,6 +83,13 @@ function MenuDetail(props: MenuDetailProps) {
     (temperatureName) =>
       specificTemperatureOnly === null || temperatureName === specificTemperatureOnly,
   );
+
+  const addToCartWithSelfClosing = () => {
+    if (!selectedOptions.selectedSize) return;
+
+    addCartInfo(createCartInfoData(selectedOptions.selectedSize));
+    closeModal();
+  };
 
   const handleSelectOption = (
     key: keyof SelectedOptionsType,
@@ -111,8 +125,7 @@ function MenuDetail(props: MenuDetailProps) {
       return;
     }
 
-    addCartInfo(createCartInfoData(selectedSize));
-    closeModal();
+    setIsMenuWillBeAdded(true);
   };
 
   const getCurrentTotalPrice = (originPrice: number) => {
@@ -143,7 +156,7 @@ function MenuDetail(props: MenuDetailProps) {
   };
 
   return (
-    <DetailBox>
+    <DetailBox ref={detailBoxRef} canAnimation={isMenuWillBeAdded}>
       <FlexWrapper>
         <ImageBox>
           <img src={thumbnail} alt="menu-thumbnail" />
@@ -211,7 +224,7 @@ function MenuDetail(props: MenuDetailProps) {
   );
 }
 
-const DetailBox = styled(ColumnWrapper)`
+const DetailBox = styled(ColumnWrapper)<{ canAnimation?: boolean }>`
   width: 590px;
   height: 660px;
 
@@ -220,6 +233,27 @@ const DetailBox = styled(ColumnWrapper)`
   border-radius: 18px;
 
   background-color: white;
+
+  ${({ canAnimation }) =>
+    canAnimation &&
+    css`
+      animation: MoveToCart ease-in-out 0.5s forwards;
+      animation-timing-function: cubic-bezier(0.25, 0.25, 0.25, 0.25);
+
+      @keyframes MoveToCart {
+        0% {
+          transform: scale(1);
+        }
+
+        50% {
+          transform: scale(0.5) translate(100%, -100%) rotate(180deg);
+        }
+
+        100% {
+          transform: scale(0.2) translate(200%, -75%) rotate(360deg);
+        }
+      }
+    `};
 `;
 
 const ButtonWrapper = styled(FlexWrapper)`
