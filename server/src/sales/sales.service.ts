@@ -100,8 +100,9 @@ export class SalesService {
   }
 
   async findOneSales(salesId: number, salesQb: SelectQueryBuilder<Sales>) {
-    const orderNumber = await salesQb
-      .where('DATE(sales.createdAt) = :createdAt', {
+    const orderNumber = await this.salesRepository
+      .createQueryBuilder()
+      .where('DATE(DATE_ADD(createdAt, interval 9 hour)) = :createdAt', {
         createdAt: getParsedDateStringWithHypen(new Date()),
       })
       .getCount();
@@ -116,7 +117,7 @@ export class SalesService {
       throw new HttpException('Invalid Sales', 409);
 
     return {
-      orderNumber: orderNumber + 1,
+      orderNumber,
       ...targetSales[0],
       itemList: targetDetails,
     };
