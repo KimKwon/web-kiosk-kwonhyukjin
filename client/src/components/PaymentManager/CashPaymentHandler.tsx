@@ -10,6 +10,7 @@ import { ReactComponent as Cash1000 } from '../../assets/icons/cash/1000.svg';
 import { ReactComponent as Dokgo } from '../../assets/dokgo-baedal.svg';
 import mixin from '../../cores/styles/mixin';
 import { parseNumberToMoneyType } from '../../utils/parse';
+import { invokeToast } from '../../cores/hooks/useToast';
 
 const CASH_METHODS = [
   {
@@ -33,11 +34,7 @@ function CashPaymentHandler(props: PaymentHandlerProps) {
 
   const handleInsertCash = (currentInsertCash: number) => {
     if (hasEnoughCashToPayment) {
-      /**
-       * TODO
-       * 충분한 잔돈이 없어요
-       * Alert 띄우기
-       */
+      invokeToast('잔돈이 충분하지 않아요.');
       return;
     }
 

@@ -13,6 +13,7 @@ import { ReactComponent as CardMethod } from '../../assets/icons/payment-card.sv
 import { ReactComponent as CashMethod } from '../../assets/icons/10000.svg';
 
 import { CartInfoType } from '../KioskManager';
+import { invokeToast } from '../../cores/hooks/useToast';
 interface CreatePaymentDto {
   paymentMethodId: number;
   givenPrice?: number;
@@ -84,11 +85,6 @@ function PaymentManager({ closeButton, cartInfoList }: PaymentManagerProps) {
     });
 
     if (!receipt) {
-      /**
-       * TODO
-       * 결제에 실패했어요
-       * Alert
-       */
       return;
     }
 

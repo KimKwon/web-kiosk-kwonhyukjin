@@ -14,6 +14,7 @@ import { ReactComponent as Minus } from '../../../assets/icons/minus.svg';
 import { ReactComponent as Plus } from '../../../assets/icons/plus.svg';
 
 import type { CartInfoCreateDto } from '../index';
+import { invokeToast } from '../../../cores/hooks/useToast';
 
 type SizeType = {
   id: number;
@@ -90,11 +91,7 @@ function MenuDetail(props: MenuDetailProps) {
   const handleChangeAmount = (val: -1 | 1) => {
     const { amount } = selectedOptions;
     if (amount + val > MAX_AMOUNT || amount + val < MIN_AMOUNT) {
-      /**
-       * TODO
-       * 카운터에 문의하세요!
-       * Alert 띄우기
-       */
+      invokeToast('지원하지 않는 수량이에요.');
       return;
     }
 
@@ -103,11 +100,7 @@ function MenuDetail(props: MenuDetailProps) {
 
   const handleAddMenu = () => {
     if (!selectedSize || !selectedTemperature) {
-      /**
-       * TODO
-       * 사이즈, 온도를 선택해주세요
-       * Alert 띄우기
-       */
+      invokeToast('옵션을 선택해주세요.');
       return;
     }
 

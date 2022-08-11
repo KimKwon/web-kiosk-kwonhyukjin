@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { invokeToast } from '../../../cores/hooks/useToast';
 import mixin from '../../../cores/styles/mixin';
 import Button from '../../common/Button';
 import { ColumnWrapper } from '../../common/Wrapper';
@@ -28,10 +29,7 @@ function ShoppingCart(props: ShoppingCartProps) {
 
   const handlePayment = () => {
     if (isCartEmpty) {
-      /**
-       * 메뉴를 선택해주세요!
-       * AlertBox 보여주기
-       */
+      invokeToast('메뉴를 선택해주세요!');
       return;
     }
 
