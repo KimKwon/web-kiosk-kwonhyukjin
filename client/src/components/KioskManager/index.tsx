@@ -164,12 +164,12 @@ function KioskManager({ data }: KioskProps) {
         <section>
           <MenuGrid>{showMenuItemIntoGrid()}</MenuGrid>
           <ShoppingCart
+            resetTimeout={remainTime}
             openPaymentModal={openPaymentModal}
             cartInfoList={cartInfoList}
             clearCartInfoList={clearCartInfoList}
             removeFromCartInfoList={removeFromCartInfoList}
           />
-          <h3>{remainTime}초 남음!</h3>
         </section>
       </KioskContent>
       <Modal isOpen={isShoppingModalOpen}>
