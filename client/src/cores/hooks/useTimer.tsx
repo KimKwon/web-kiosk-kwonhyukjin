@@ -15,7 +15,7 @@ function useTimer(initialTimeout: number) {
       setRemainTime((prevRemainTime) => prevRemainTime - 1);
 
       if (remainTimeRef.current - 1 === 0) {
-        _clearInterval();
+        clear();
         cb();
       }
     }, 1000);

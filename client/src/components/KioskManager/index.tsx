@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import Modal from '../common/Modal';
@@ -14,6 +14,7 @@ import { ReactComponent as Logo } from '../../assets/logo.svg';
 import { ReactComponent as XCircle } from '../../assets/icons/x-circle.svg';
 
 import type { CategorizedMenu } from '../../App';
+import useTimer from '../../cores/hooks/useTimer';
 
 interface KioskProps {
   data: CategorizedMenu[];
@@ -32,7 +33,10 @@ export interface CartInfoType {
 
 export type CartInfoCreateDto = Omit<CartInfoType, 'cartElementId'>;
 
+const IDLE_TIMEOUT = 10;
+
 function KioskManager({ data }: KioskProps) {
+  const { remainTime, invoke, pause, clear } = useTimer(IDLE_TIMEOUT);
   const [selectedCategoryIdx, setselectedCategoryIdx] = useState(0);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isShoppingModalOpen, setIsShoppingModalOpen] = useState(false);
@@ -127,6 +131,24 @@ function KioskManager({ data }: KioskProps) {
     setIsPaymentModalOpen(true);
   };
 
+  useEffect(() => {
+    if (cartInfoList.length > 0) {
+      invoke(clearCartInfoList);
+      return;
+    }
+
+    clear();
+  }, [cartInfoList]);
+
+  useEffect(() => {
+    if (isPaymentModalOpen || isShoppingModalOpen) {
+      pause();
+      return;
+    }
+
+    if (remainTime < IDLE_TIMEOUT) invoke(clearCartInfoList);
+  }, [isPaymentModalOpen, isShoppingModalOpen, remainTime]);
+
   return (
     <KioskContainer>
       <header>
@@ -147,9 +169,9 @@ function KioskManager({ data }: KioskProps) {
             clearCartInfoList={clearCartInfoList}
             removeFromCartInfoList={removeFromCartInfoList}
           />
+          <h3>{remainTime}초 남음!</h3>
         </section>
       </KioskContent>
-
       <Modal isOpen={isShoppingModalOpen}>
         <MenuDetail
           menuId={currentShoppingMenuId}
