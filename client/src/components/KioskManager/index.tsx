@@ -50,9 +50,12 @@ function KioskManager({ data }: KioskProps) {
     }));
 
   const showMenuItemIntoGrid = () => {
-    if (!data[selectedCategoryIdx]?.items) return [];
-    return data[selectedCategoryIdx].items.map((menu) => (
-      <MenuItem key={menu.id} menuInfo={menu} onClickMenu={openModalWithSelectedMenu} />
+    return data.map((menuData) => (
+      <div key={menuData.id} className="translated-box">
+        {menuData.items.map((menu) => (
+          <MenuItem key={menu.id} menuInfo={menu} onClickMenu={openModalWithSelectedMenu} />
+        ))}
+      </div>
     ));
   };
 
@@ -162,7 +165,7 @@ function KioskManager({ data }: KioskProps) {
           changeCategoryIdx={changeCategoryIdx}
         />
         <section>
-          <MenuGrid>{showMenuItemIntoGrid()}</MenuGrid>
+          <MenuGrid selectedCategoryIdx={selectedCategoryIdx}>{showMenuItemIntoGrid()}</MenuGrid>
           <ShoppingCart
             resetTimeout={remainTime}
             openPaymentModal={openPaymentModal}
