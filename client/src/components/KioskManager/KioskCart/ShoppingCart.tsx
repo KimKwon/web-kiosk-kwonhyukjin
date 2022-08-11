@@ -40,7 +40,7 @@ function ShoppingCart(props: ShoppingCartProps) {
         />
       ))}
 
-      <CardButtonWrapper>
+      <CartButtonWrapper>
         <Button onClick={clearCartInfoList} variant="contained" size="md" color="gray02">
           전체 취소
         </Button>
@@ -50,7 +50,7 @@ function ShoppingCart(props: ShoppingCartProps) {
             <span className="cart-total-price">{getTotalPrice().toLocaleString()}</span>
           </PaymentButtonInnerText>
         </Button>
-      </CardButtonWrapper>
+      </CartButtonWrapper>
     </CartContainer>
   );
 }
@@ -71,7 +71,7 @@ const CartContainer = styled.ul`
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.25);
 `;
 
-const CardButtonWrapper = styled.div`
+const CartButtonWrapper = styled.div`
   width: 100%;
   margin-top: auto;
 

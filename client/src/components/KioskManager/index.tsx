@@ -64,11 +64,11 @@ function KioskManager({ data }: KioskProps) {
     setCartInfoList([]);
   };
 
-  const addCardInfo = (newCardInfo: Omit<CartInfoType, 'cartElementId'>) => {
+  const addCartInfo = (newCartInfo: Omit<CartInfoType, 'cartElementId'>) => {
     setCartInfoList((prevCartInfoList) => [
       ...prevCartInfoList,
       {
-        ...newCardInfo,
+        ...newCartInfo,
         cartElementId: prevCartInfoList.length + 1,
       },
     ]);
@@ -118,7 +118,7 @@ function KioskManager({ data }: KioskProps) {
         <MenuDetail
           menuId={currentShoppingMenuId}
           closeModal={closeModal('SHOPPING')}
-          addCartInfo={addCardInfo}
+          addCartInfo={addCartInfo}
         />
       </Modal>
       <Modal isOpen={isPaymentModalOpen}>
