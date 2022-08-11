@@ -1,3 +1,5 @@
+import ErrorBoundary from './components/ErrorBoundary';
+import FallbackUI from './components/ErrorBoundary/FallbackUI';
 import IdleKioskScreen from './components/IdleKioskScreen';
 import KioskManager from './components/KioskManager';
 import useAPI, { BaseAPI } from './cores/hooks/useAPI';
@@ -17,6 +19,16 @@ export interface CategorizedMenu {
   id: number;
   name: string;
   items: MenuType[];
+}
+
+function ErrorCapturingApp() {
+  return (
+    <ErrorBoundary
+      fallback={({ resetError, error }) => <FallbackUI error={error} resetError={resetError} />}
+    >
+      <App />
+    </ErrorBoundary>
+  );
 }
 
 function App() {
@@ -43,4 +55,4 @@ function App() {
   return screenHandler();
 }
 
-export default App;
+export default ErrorCapturingApp;
